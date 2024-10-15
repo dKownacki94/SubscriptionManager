@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SubscriptionManager.Views.SubscriptionDetailPage"
+             xmlns:viewModels="clr-namespace:SubscriptionManager.ViewModels"
+             Title="Szczegóły Subskrypcji">
+    
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+            <Entry Placeholder="Nazwa" Text="{Binding Name}" />
+            <Entry Placeholder="Cena" Text="{Binding Price}" Keyboard="Numeric" />
+            <DatePicker Date="{Binding StartDate}" />
+            <DatePicker Date="{Binding EndDate}" />
+            <Entry Placeholder="Avatar (URL lub ścieżka)" Text="{Binding Avatar}" />
+            <Button Text="Zapisz" Command="{Binding SaveCommand}" />
+        </StackLayout>
+    </ContentPage.Content>
+    
+</ContentPage>

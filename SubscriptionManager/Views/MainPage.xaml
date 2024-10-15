@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SubscriptionManager.Views.MainPage"
+             xmlns:viewModels="clr-namespace:SubscriptionManager.ViewModels"
+             xmlns:converters="clr-namespace:SubscriptionManager.Converters">
+
+    <!-- Rejestracja konwertera -->
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToStatusConverter x:Key="BoolToStatusConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <StackLayout Padding="10">
+            <CollectionView ItemsSource="{Binding Subscriptions}"
+                            SelectionMode="Single"
+                            SelectionChanged="OnSubscriptionSelected">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Orientation="Horizontal" Padding="5">
+                            <Image Source="{Binding Avatar}" WidthRequest="50" HeightRequest="50" />
+                            <StackLayout>
+                                <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                <Label Text="{Binding Price, StringFormat='Cena: {0:C}'}" />
+                                <Label Text="{Binding IsActive, Converter={StaticResource BoolToStatusConverter}}" />
+                            </StackLayout>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Button Text="Dodaj Subskrypcję" Command="{Binding AddSubscriptionCommand}" />
+        </StackLayout>
+    </ContentPage.Content>
+
+</ContentPage>
