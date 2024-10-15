@@ -11,6 +11,15 @@ public partial class MainPage : ContentPage
         BindingContext = viewModel;
     }
 
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is MainViewModel viewModel)
+        {
+            await viewModel.LoadSubscriptionsCommand.ExecuteAsync(null);
+        }
+    }
+
     private async void OnSubscriptionSelected(object sender, SelectionChangedEventArgs e)
     {
         if (e.CurrentSelection.FirstOrDefault() is Models.Subscription selectedSubscription)

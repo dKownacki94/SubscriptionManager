@@ -23,8 +23,6 @@ namespace SubscriptionManager.ViewModels
             LoadSubscriptionsCommand = new AsyncRelayCommand(LoadSubscriptionsAsync);
             AddSubscriptionCommand = new AsyncRelayCommand(OnAddSubscriptionAsync);
             SubscriptionTappedCommand = new AsyncRelayCommand<Subscription>(OnSubscriptionTappedAsync);
-
-            LoadSubscriptionsCommand.Execute(null);
         }
 
         private async Task LoadSubscriptionsAsync()
