@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubscriptionManager.Applica
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubscriptionManager.Infrastructure", "SubscriptionManager.Infrastructure\SubscriptionManager.Infrastructure.csproj", "{554B17E1-44AF-47AF-8CD6-BAA38C601D62}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubscriptionManager.Tests", "SubscriptionManager.Tests\SubscriptionManager.Tests.csproj", "{1CCF4FB4-49FE-4198-9A28-6D0B101FF779}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{554B17E1-44AF-47AF-8CD6-BAA38C601D62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{554B17E1-44AF-47AF-8CD6-BAA38C601D62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{554B17E1-44AF-47AF-8CD6-BAA38C601D62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CCF4FB4-49FE-4198-9A28-6D0B101FF779}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CCF4FB4-49FE-4198-9A28-6D0B101FF779}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CCF4FB4-49FE-4198-9A28-6D0B101FF779}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CCF4FB4-49FE-4198-9A28-6D0B101FF779}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
