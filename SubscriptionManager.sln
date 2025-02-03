@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubscriptionManager.Presentatnion", "SubscriptionManager.Presentatnion\SubscriptionManager.Presentatnion.csproj", "{3B84E852-4725-4C68-8492-D778E9E11F8F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubscriptionManager.Domain", "SubscriptionManager.Domain\SubscriptionManager.Domain.csproj", "{A0DCBE0A-AE1E-49AE-A6D8-103CBB6CD545}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubscriptionManager.Application", "SubscriptionManager.Application\SubscriptionManager.Application.csproj", "{7C09B12E-DD93-4E01-AA41-6103098B5BD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubscriptionManager.Infrastructure", "SubscriptionManager.Infrastructure\SubscriptionManager.Infrastructure.csproj", "{554B17E1-44AF-47AF-8CD6-BAA38C601D62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{7C09B12E-DD93-4E01-AA41-6103098B5BD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C09B12E-DD93-4E01-AA41-6103098B5BD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C09B12E-DD93-4E01-AA41-6103098B5BD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{554B17E1-44AF-47AF-8CD6-BAA38C601D62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{554B17E1-44AF-47AF-8CD6-BAA38C601D62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{554B17E1-44AF-47AF-8CD6-BAA38C601D62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{554B17E1-44AF-47AF-8CD6-BAA38C601D62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
