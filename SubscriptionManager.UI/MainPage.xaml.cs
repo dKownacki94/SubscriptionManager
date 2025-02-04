@@ -1,4 +1,4 @@
-﻿namespace SubscriptionManager.Presentatnion
+﻿namespace SubscriptionManager.UI
 {
     public partial class MainPage : ContentPage
     {

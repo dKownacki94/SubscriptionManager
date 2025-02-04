@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace SubscriptionManager.Presentatnion
+namespace SubscriptionManager.UI
 {
     public class Program
     {

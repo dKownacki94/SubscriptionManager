@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace SubscriptionManager.Presentatnion
+namespace SubscriptionManager.UI
 {
     [Application]
     public class MainApplication : MauiApplication

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace SubscriptionManager.Presentatnion
+namespace SubscriptionManager.UI
 {
     public static class MauiProgram
     {

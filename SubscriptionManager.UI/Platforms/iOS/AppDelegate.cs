@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace SubscriptionManager.Presentatnion
+namespace SubscriptionManager.UI
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate
