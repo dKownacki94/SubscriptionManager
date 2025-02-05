@@ -2,9 +2,12 @@
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:SubscriptionManager.UI"
+             xmlns:converters="clr-namespace:SubscriptionManager.UI.Converters"
              x:Class="SubscriptionManager.UI.App">
     <Application.Resources>
         <ResourceDictionary>
+            <converters:AvatarConverter x:Key="AvatarConverter" />
+            <converters:SelectionChangedEventArgsConverter x:Key="SelectionChangedEventArgsConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />

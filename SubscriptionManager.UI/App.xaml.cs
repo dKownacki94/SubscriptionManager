@@ -1,12 +1,11 @@
-﻿namespace SubscriptionManager.UI
-{
-    public partial class App : Application
-    {
-        public App()
-        {
-            InitializeComponent();
+﻿namespace SubscriptionManager.UI;
 
-            MainPage = new AppShell();
-        }
+public partial class App : Microsoft.Maui.Controls.Application
+{
+    public App()
+    {
+        InitializeComponent();
+
+        MainPage = new AppShell();
     }
 }

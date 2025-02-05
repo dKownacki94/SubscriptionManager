@@ -1,25 +1,38 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+using Microsoft.Extensions.Logging;
+using SubscriptionManager.Application.Interfaces;
+using SubscriptionManager.Application.Services;
+using SubscriptionManager.Domain.Interfaces;
+using SubscriptionManager.Infrastructure.Repositories;
+using SubscriptionManager.UI.ViewModels;
+using SubscriptionManager.UI.Views;
 
-namespace SubscriptionManager.UI
+namespace SubscriptionManager.UI;
+
+public static class MauiProgram
 {
-    public static class MauiProgram
+    public static MauiApp CreateMauiApp()
     {
-        public static MauiApp CreateMauiApp()
-        {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            });
+
+        builder.Services.AddScoped<ISubscriptionRepository, InMemorySubscriptionRepository>(); 
+        builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+
+        builder.Services.AddTransient<SubscriptionListPage>();
+        builder.Services.AddTransient<SubscriptionListViewModel>();
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
 
-            return builder.Build();
-        }
+        return builder.Build();
     }
 }
