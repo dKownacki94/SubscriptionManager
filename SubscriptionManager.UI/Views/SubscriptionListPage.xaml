@@ -44,13 +44,13 @@
                     <!-- Nazwa i Cena -->
                     <StackLayout Grid.Column="1" VerticalOptions="Center">
                         <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="Medium" />
-                        <Label Text="{Binding Price, StringFormat='Cena: {0:C}'}" FontSize="Small" />
+                        <Label Text="{Binding Price, StringFormat='Cena: {0}'}" FontSize="Small" />
                     </StackLayout>
 
                     <!-- Data Trwania -->
                     <StackLayout Grid.Column="2" VerticalOptions="Center">
-                        <Label Text="{Binding StartDate, StringFormat='Od: {0:dd.MM.yyyy}'}" FontSize="Small" />
-                        <Label Text="{Binding EndDate, StringFormat='Do: {0:dd.MM.yyyy}'}" FontSize="Small" />
+                        <Label Text="{Binding DateFrom, StringFormat='Od: {0:dd.MM.yyyy}'}" FontSize="Small" />
+                        <Label Text="{Binding DateTo, StringFormat='Do: {0:dd.MM.yyyy}'}" FontSize="Small" />
                     </StackLayout>
                 </Grid>
             </DataTemplate>

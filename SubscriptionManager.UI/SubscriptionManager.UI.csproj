@@ -71,6 +71,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\SubscriptionEditPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\SubscriptionListPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

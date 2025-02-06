@@ -10,17 +10,17 @@ public partial class SubscriptionListViewModel : ObservableObject
 {
     private readonly ISubscriptionService _subscriptionService;
 
+    [ObservableProperty]
+    private SubscriptionDto? _selectedSubscription;
+
+    [ObservableProperty]
+    public ObservableCollection<SubscriptionDto> subscriptions;
+
     public SubscriptionListViewModel(ISubscriptionService subscriptionService)
     {
         _subscriptionService = subscriptionService;
         Subscriptions = new ObservableCollection<SubscriptionDto>();
     }
-
-    [ObservableProperty]
-    private SubscriptionDto _selectedSubscription;
-
-    [ObservableProperty]
-    public ObservableCollection<SubscriptionDto> subscriptions;
 
     [RelayCommand]
     void Appearing()
@@ -42,7 +42,7 @@ public partial class SubscriptionListViewModel : ObservableObject
     [RelayCommand]
     private async Task AddSubscription()
     {
-        //await Shell.Current.GoToAsync("edit");
+        await Shell.Current.GoToAsync("edit");
     }
 
     [RelayCommand]

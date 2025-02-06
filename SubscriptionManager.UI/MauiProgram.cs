@@ -29,6 +29,9 @@ public static class MauiProgram
         builder.Services.AddTransient<SubscriptionListPage>();
         builder.Services.AddTransient<SubscriptionListViewModel>();
 
+        builder.Services.AddTransient<SubscriptionEditPage>();
+        builder.Services.AddTransient<SubscriptionEditViewModel>();
+
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
