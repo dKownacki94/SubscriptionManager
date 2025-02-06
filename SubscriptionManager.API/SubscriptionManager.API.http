@@ -1,0 +1,24 @@
+@SubscriptionManager.API_HostAddress = http://localhost:5297
+
+### Pobierz wszystkie subskrypcje
+GET  {{SubscriptionManager.API_HostAddress}}/subscriptions
+Accept: application/json
+
+### Pobierz subskrypcjê o podanym ID
+GET  {{SubscriptionManager.API_HostAddress}}/subscriptions/123e4567-e89b-12d3-a456-426614174000
+Accept: application/json
+
+### Dodaj now¹ subskrypcjê
+POST  {{SubscriptionManager.API_HostAddress}}/subscriptions
+Content-Type: application/json
+
+{
+    "name": "Netflix",
+    "dateFrom": "2025-01-01T00:00:00",
+    "dateTo": "2025-12-31T00:00:00",
+    "price": 50.00,
+    "avatarPath": "/images/netflix.png"
+}
+
+### Usuñ subskrypcjê
+DELETE  {{SubscriptionManager.API_HostAddress}}/subscriptions/123e4567-e89b-12d3-a456-426614174000
