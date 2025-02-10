@@ -5,9 +5,6 @@ using SubscriptionManager.Domain.Interfaces;
 
 namespace SubscriptionManager.Application.Services;
 
-/// <summary>
-/// Implementacja logiki przypadków użycia związanej z subskrypcjami.
-/// </summary>
 public class SubscriptionService : ISubscriptionService
 {
     private readonly ISubscriptionRepository _subscriptionRepository;
@@ -17,9 +14,6 @@ public class SubscriptionService : ISubscriptionService
         _subscriptionRepository = subscriptionRepository;
     }
 
-    /// <summary>
-    /// Pobiera wszystkie subskrypcje i mapuje je do DTO.
-    /// </summary>
     public async Task<IEnumerable<SubscriptionDto>> GetAllSubscriptionsAsync()
     {
         var subscriptions = await _subscriptionRepository.GetAllAsync();
@@ -34,9 +28,6 @@ public class SubscriptionService : ISubscriptionService
         });
     }
 
-    /// <summary>
-    /// Pobiera subskrypcję o podanym identyfikatorze i mapuje ją do DTO.
-    /// </summary>
     public async Task<SubscriptionDto> GetSubscriptionByIdAsync(Guid id)
     {
         var subscription = await _subscriptionRepository.GetByIdAsync(id);
@@ -54,13 +45,8 @@ public class SubscriptionService : ISubscriptionService
         };
     }
 
-    /// <summary>
-    /// Dodaje nową subskrypcję.
-    /// Tworzy obiekt domenowy na podstawie DTO i zapisuje go przy użyciu repozytorium.
-    /// </summary>
     public async Task AddSubscriptionAsync(SubscriptionDto subscriptionDto)
     {
-        // Tworzymy obiekt domenowy – walidacja odbywa się w konstruktorze encji.
         var subscription = new Subscription(
             subscriptionDto.Name,
             subscriptionDto.DateFrom,
@@ -71,10 +57,6 @@ public class SubscriptionService : ISubscriptionService
         await _subscriptionRepository.AddAsync(subscription);
     }
 
-    /// <summary>
-    /// Aktualizuje istniejącą subskrypcję.
-    /// Pobiera aktualny obiekt domenowy, aktualizuje go i zapisuje zmiany.
-    /// </summary>
     public async Task UpdateSubscriptionAsync(SubscriptionDto subscriptionDto)
     {
         var subscription = await _subscriptionRepository.GetByIdAsync(subscriptionDto.Id);
@@ -92,10 +74,6 @@ public class SubscriptionService : ISubscriptionService
 
         await _subscriptionRepository.UpdateAsync(subscription);
     }
-
-    /// <summary>
-    /// Usuwa subskrypcję o podanym identyfikatorze.
-    /// </summary>
     public async Task DeleteSubscriptionAsync(Guid id)
     {
         await _subscriptionRepository.DeleteAsync(id);

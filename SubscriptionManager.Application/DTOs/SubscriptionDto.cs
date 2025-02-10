@@ -1,8 +1,5 @@
 ﻿namespace SubscriptionManager.Application.DTOs;
 
-/// <summary>
-/// Obiekt transferu danych reprezentujący subskrypcję.
-/// </summary>
 public class SubscriptionDto
 {
     public Guid Id { get; set; }
