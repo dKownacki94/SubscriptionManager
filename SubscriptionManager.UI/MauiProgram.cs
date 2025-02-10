@@ -23,7 +23,7 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        builder.Services.AddScoped<ISubscriptionRepository, InMemorySubscriptionRepository>(); 
+        builder.Services.AddScoped<ISubscriptionRepository, InMemorySubscriptionRepository>();
         builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 
         builder.Services.AddTransient<SubscriptionListPage>();
