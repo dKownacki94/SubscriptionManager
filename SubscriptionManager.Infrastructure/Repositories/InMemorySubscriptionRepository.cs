@@ -9,6 +9,9 @@ public class InMemorySubscriptionRepository : ISubscriptionRepository
 
     public Task<IEnumerable<Subscription>> GetAllAsync()
     {
+
+        _subscriptions.Add(new Subscription("Prime Video", DateTime.Now, DateTime.Now.AddDays(1), 50, "dotnet_bot.png"));
+
         return Task.FromResult(_subscriptions.AsEnumerable());
     }
 

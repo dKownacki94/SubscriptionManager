@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:SubscriptionManager.UI"
     xmlns:views="clr-namespace:SubscriptionManager.UI.Views"
     Shell.FlyoutBehavior="Disabled"
+    BackgroundColor="{StaticResource BackgroundColor}"
     Title="SubscriptionManager.UI">
 
     <ShellContent 

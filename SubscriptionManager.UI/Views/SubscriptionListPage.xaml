@@ -4,6 +4,7 @@
              x:Class="SubscriptionManager.UI.Views.SubscriptionListPage"
              xmlns:viewmodels="clr-namespace:SubscriptionManager.UI.ViewModels"
              xmlns:toolkit="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
+             BackgroundColor="{StaticResource BackgroundColor}"
              Title="Subskrypcje">
 
     <ContentPage.ToolbarItems>
@@ -19,41 +20,56 @@
     <CollectionView ItemsSource="{Binding Subscriptions}"
                     SelectedItem="{Binding SelectedSubscription}"
                     SelectionMode="Single">
+
         <CollectionView.Behaviors>
             <toolkit:EventToCommandBehavior 
             EventName="SelectionChanged" 
             Command="{Binding SelectedSubscriptionChangedCommand}"
             EventArgsConverter="{StaticResource SelectionChangedEventArgsConverter}" />
         </CollectionView.Behaviors>
+
         <CollectionView.ItemTemplate>
+
             <DataTemplate>
-                <Grid Padding="10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="60" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="100" />
-                    </Grid.ColumnDefinitions>
 
-                    <!-- Avatar -->
-                    <Image Source="{Binding AvatarPath, Converter={StaticResource AvatarConverter}}"
-                           WidthRequest="50"
-                           HeightRequest="50"
-                           Aspect="AspectFill"
-                           Grid.Column="0" />
+                <Border Stroke="{StaticResource Gray200}"
+                        StrokeShape="RoundRectangle 10"
+                        BackgroundColor="White"
+                        Padding="10"
+                        Margin="10,5,10,5">
 
-                    <!-- Nazwa i Cena -->
-                    <StackLayout Grid.Column="1" VerticalOptions="Center">
-                        <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="Medium" />
-                        <Label Text="{Binding Price, StringFormat='Cena: {0}'}" FontSize="Small" />
-                    </StackLayout>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="100" />
+                        </Grid.ColumnDefinitions>
 
-                    <!-- Data Trwania -->
-                    <StackLayout Grid.Column="2" VerticalOptions="Center">
-                        <Label Text="{Binding DateFrom, StringFormat='Od: {0:dd.MM.yyyy}'}" FontSize="Small" />
-                        <Label Text="{Binding DateTo, StringFormat='Do: {0:dd.MM.yyyy}'}" FontSize="Small" />
-                    </StackLayout>
-                </Grid>
+                        <Border Stroke="{StaticResource Gray200}"
+                                BackgroundColor= "{StaticResource BackgroundColor}"
+                                StrokeShape="RoundRectangle 40"
+                                WidthRequest="70"
+                                HeightRequest="70">
+                            <Image Source="{Binding AvatarPath, Converter={StaticResource AvatarConverter}}"
+                                   WidthRequest="70"
+                                   HeightRequest="70"
+                                   Aspect="AspectFill"
+                                   Grid.Column="0" />
+                        </Border>
+
+                        <StackLayout Grid.Column="1" VerticalOptions="Center">
+                            <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="Large" />
+                            <Label Text="{Binding DateFrom, StringFormat='{0:dd.MM.yyyy}'}" FontSize="Micro" />
+                            <Label Text="{Binding DateTo, StringFormat='{0:dd.MM.yyyy}'}" FontSize="Micro" />
+                        </StackLayout>
+
+                        <StackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End">
+                            <Label Text="{Binding Price, StringFormat='{0} zł'}" FontSize="Large" />
+                        </StackLayout>
+                    </Grid>
+                </Border>
             </DataTemplate>
+
         </CollectionView.ItemTemplate>
     </CollectionView>
 </ContentPage>
