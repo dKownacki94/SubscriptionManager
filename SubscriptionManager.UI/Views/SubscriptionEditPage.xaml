@@ -4,7 +4,7 @@
              xmlns:viewmodels="clr-namespace:SubscriptionManager.UI.ViewModels"
              x:Class="SubscriptionManager.UI.Views.SubscriptionEditPage"
              xmlns:toolkit="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
-             Title="SubscriptionEditPage">
+             Title="Dodaj/edytuj subskrypcje">
     
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior 

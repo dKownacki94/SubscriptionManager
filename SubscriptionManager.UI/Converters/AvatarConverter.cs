@@ -9,7 +9,7 @@ public class AvatarConverter : IValueConverter
         string path = value as string;
         if (string.IsNullOrEmpty(path) || !File.Exists(path))
         {
-            return "dotnet_bot.png";
+            return "logo_netflix.png";
         }
         return path;
     }
