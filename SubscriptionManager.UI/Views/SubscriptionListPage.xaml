@@ -47,7 +47,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="80" />
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="70" />
                         </Grid.ColumnDefinitions>
 
                         <Border Stroke="{StaticResource Gray100}"

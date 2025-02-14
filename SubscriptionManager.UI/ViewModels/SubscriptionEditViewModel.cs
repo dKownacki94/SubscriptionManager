@@ -96,6 +96,23 @@ public partial class SubscriptionEditViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private async Task DeleteAsync() 
+    {
+        if (SubscriptionId == Guid.Empty)
+            return;
+
+        try
+        {
+            await _subscriptionService.DeleteSubscriptionAsync(SubscriptionId);
+            await Shell.Current.GoToAsync("..");
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Błąd", ex.Message, "OK");
+        }
+    }
+
+    [RelayCommand]
     private async Task PickAvatarAsync()
     {
         try

@@ -42,6 +42,7 @@
             <!-- Przyciski Akcji -->
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="20">
                 <Button Text="Zapisz" Command="{Binding SaveCommand}" />
+                <Button Text="Usuń" Command="{Binding DeleteCommand}" />
                 <Button Text="Anuluj" Command="{Binding CancelCommand}" />
             </StackLayout>
         </StackLayout>
