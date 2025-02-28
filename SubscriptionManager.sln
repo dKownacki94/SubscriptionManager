@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubscriptionManager.UI", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubscriptionManager.API", "SubscriptionManager.API\SubscriptionManager.API.csproj", "{9FBBEB84-A067-488D-BEB6-60B1DDB79610}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubscriptionManager.SolutionAnalyzer", "SubscriptionManager.SolutionAnalyzer\SubscriptionManager.SolutionAnalyzer.csproj", "{C5708E73-5E82-4A37-9C97-FE4F9D5B3B88}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{9FBBEB84-A067-488D-BEB6-60B1DDB79610}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FBBEB84-A067-488D-BEB6-60B1DDB79610}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FBBEB84-A067-488D-BEB6-60B1DDB79610}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5708E73-5E82-4A37-9C97-FE4F9D5B3B88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5708E73-5E82-4A37-9C97-FE4F9D5B3B88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5708E73-5E82-4A37-9C97-FE4F9D5B3B88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5708E73-5E82-4A37-9C97-FE4F9D5B3B88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
