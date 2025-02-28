@@ -4,6 +4,7 @@ using SubscriptionManager.Application.Interfaces;
 using SubscriptionManager.Application.Services;
 using SubscriptionManager.Domain.Interfaces;
 using SubscriptionManager.Infrastructure.Repositories;
+using SubscriptionManager.Infrastructure.Services;
 using SubscriptionManager.UI.ViewModels;
 using SubscriptionManager.UI.Views;
 
@@ -25,6 +26,7 @@ public static class MauiProgram
 
         builder.Services.AddScoped<ISubscriptionRepository, InMemorySubscriptionRepository>();
         builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+        builder.Services.AddSingleton<IAvatarService, AvatarService>();
 
         builder.Services.AddTransient<SubscriptionListPage>();
         builder.Services.AddTransient<SubscriptionListViewModel>();
