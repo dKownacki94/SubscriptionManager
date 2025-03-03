@@ -128,8 +128,9 @@ public partial class MainWindow : Window
     private void GenerateOutput_Click(object sender, RoutedEventArgs e)
     {
         var selectedFiles = GetSelectedFiles(FileTree.Items.Cast<TreeNode>());
-        GenerateOutputFile(selectedFiles, outputPath);
-        MessageBox.Show($"Plik 'output.txt' został wygenerowany w:\n{outputPath}\nWklej jego zawartość do Groka!",
+        string outputContent = GenerateOutputFile(selectedFiles, outputPath);
+        Clipboard.SetText(outputContent);
+        MessageBox.Show($"Plik 'output.txt' został wygenerowany w:\n{outputPath}\n\nZawartość została skopiowana do schowka!",
             "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
@@ -145,7 +146,7 @@ public partial class MainWindow : Window
         return selectedFiles;
     }
 
-    private void GenerateOutputFile(List<string> files, string outputPath)
+    private string GenerateOutputFile(List<string> files, string outputPath)
     {
         var sb = new StringBuilder();
         foreach (var file in files)
@@ -154,6 +155,8 @@ public partial class MainWindow : Window
             sb.AppendLine(File.ReadAllText(Path.Combine(solutionPath, file)));
             sb.AppendLine("---");
         }
-        File.WriteAllText(outputPath, sb.ToString());
+        string outputContent = sb.ToString();
+        File.WriteAllText(outputPath, outputContent);
+        return outputContent;
     }
 }

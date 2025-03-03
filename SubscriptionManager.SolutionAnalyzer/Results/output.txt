@@ -1,632 +1,198 @@
-Plik: SubscriptionManager.UI\App.xaml.cs
-namespace SubscriptionManager.UI;
-
-public partial class App : Microsoft.Maui.Controls.Application
-{
-    public App()
-    {
-        InitializeComponent();
-
-        MainPage = new AppShell();
-    }
-}
-
----
-Plik: SubscriptionManager.UI\AppShell.xaml.cs
-using SubscriptionManager.UI.Views;
-
-namespace SubscriptionManager.UI;
-
-public partial class AppShell : Shell
-{
-    public AppShell()
-    {
-        InitializeComponent();
-
-        Routing.RegisterRoute("edit", typeof(SubscriptionEditPage));
-    }
-}
-
----
-Plik: SubscriptionManager.UI\MauiProgram.cs
-using CommunityToolkit.Maui;
-using Microsoft.Extensions.Logging;
-using SubscriptionManager.Application.Interfaces;
+Plik: SubscriptionManager.Tests\Application\SubscriptionServiceTests.cs
+using Moq;
+using SubscriptionManager.Application.DTOs;
 using SubscriptionManager.Application.Services;
-using SubscriptionManager.Domain.Interfaces;
-using SubscriptionManager.Infrastructure.Repositories;
-using SubscriptionManager.UI.ViewModels;
-using SubscriptionManager.UI.Views;
-
-namespace SubscriptionManager.UI;
-
-public static class MauiProgram
-{
-    public static MauiApp CreateMauiApp()
-    {
-        var builder = MauiApp.CreateBuilder();
-        builder
-            .UseMauiApp<App>()
-            .UseMauiCommunityToolkit()
-            .ConfigureFonts(fonts =>
-            {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-            });
-
-        builder.Services.AddScoped<ISubscriptionRepository, InMemorySubscriptionRepository>();
-        builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
-
-        builder.Services.AddTransient<SubscriptionListPage>();
-        builder.Services.AddTransient<SubscriptionListViewModel>();
-
-        builder.Services.AddTransient<SubscriptionEditPage>();
-        builder.Services.AddTransient<SubscriptionEditViewModel>();
-
-#if DEBUG
-        builder.Logging.AddDebug();
-#endif
-
-        return builder.Build();
-    }
-}
-
----
-Plik: SubscriptionManager.UI\Converters\AvatarConverter.cs
-using System.Globalization;
-
-namespace SubscriptionManager.UI.Converters;
-
-public class AvatarConverter : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        string path = value as string;
-        if (string.IsNullOrEmpty(path) || !File.Exists(path))
-        {
-            return "logo_netflix.png";
-        }
-        return path;
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
-    }
-}
-
----
-Plik: SubscriptionManager.UI\Converters\SelectionChangedEventArgsConverter.cs
-using System.Globalization;
-
-namespace SubscriptionManager.UI.Converters;
-
-public class SelectionChangedEventArgsConverter : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        var args = value as SelectionChangedEventArgs;
-        return args?.CurrentSelection.FirstOrDefault();
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
-    }
-}
-
----
-Plik: SubscriptionManager.UI\ViewModels\SubscriptionEditViewModel.cs
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using SubscriptionManager.Application.DTOs;
-using SubscriptionManager.Application.Interfaces;
-
-namespace SubscriptionManager.UI.ViewModels;
-
-[QueryProperty(nameof(SubscriptionId), "id")]
-public partial class SubscriptionEditViewModel : ObservableObject
-{
-    private readonly ISubscriptionService _subscriptionService;
-
-    private SubscriptionDto _subscription;
-
-    [ObservableProperty]
-    private Guid _subscriptionId;
-
-    [ObservableProperty]
-    private string _name = string.Empty;
-
-    [ObservableProperty]
-    private decimal _price;
-
-    [ObservableProperty]
-    private DateTime _startDate = DateTime.Today;
-
-    [ObservableProperty]
-    private DateTime _endDate = DateTime.Today.AddMonths(1);
-
-    [ObservableProperty]
-    private string _avatarPath = "dotnet_bot.png";
-
-    [ObservableProperty]
-    private string pageTitle = "Dodaj Subskrypcję";
-
-    public SubscriptionEditViewModel(ISubscriptionService subscriptionService)
-    {
-        _subscriptionService = subscriptionService;
-        _subscription = new SubscriptionDto()
-        {
-            DateFrom = DateTime.Today,
-            DateTo = DateTime.Today.AddMonths(1)
-        };
-    }
-
-    [RelayCommand]
-    private void Appearing()
-    {
-        LoadSubscriptionCommand.Execute(null);
-    }
-
-    [RelayCommand]
-    private async Task LoadSubscriptionAsync()
-    {
-        if (SubscriptionId != Guid.Empty)
-        {
-            var subscription = await _subscriptionService.GetSubscriptionByIdAsync(SubscriptionId);
-            if (subscription != null)
-            {
-                _subscription = subscription;
-                MapSubscriptionToProperties(_subscription);
-                PageTitle = "Edytuj Subskrypcję";
-                return;
-            }
-        }
-    }
-
-    [RelayCommand]
-    private async Task SaveAsync()
-    {
-        try
-        {
-            MapPropertiesToSubscription(_subscription);
-
-            if (SubscriptionId == Guid.Empty)
-            {
-                await _subscriptionService.AddSubscriptionAsync(_subscription);
-            }
-            else
-            {
-                await _subscriptionService.UpdateSubscriptionAsync(_subscription);
-            }
-
-            await Shell.Current.GoToAsync("..");
-        }
-        catch (Exception ex)
-        {
-            await Shell.Current.DisplayAlert("Błąd", ex.Message, "OK");
-        }
-    }
-
-    [RelayCommand]
-    private async Task CancelAsync()
-    {
-        await Shell.Current.GoToAsync("..");
-    }
-
-    [RelayCommand]
-    private async Task DeleteAsync() 
-    {
-        if (SubscriptionId == Guid.Empty)
-            return;
-
-        try
-        {
-            await _subscriptionService.DeleteSubscriptionAsync(SubscriptionId);
-            await Shell.Current.GoToAsync("..");
-        }
-        catch (Exception ex)
-        {
-            await Shell.Current.DisplayAlert("Błąd", ex.Message, "OK");
-        }
-    }
-
-    [RelayCommand]
-    private async Task PickAvatarAsync()
-    {
-        try
-        {
-            var result = await FilePicker.Default.PickAsync(new PickOptions
-            {
-                PickerTitle = "Wybierz avatar",
-                FileTypes = FilePickerFileType.Images
-            });
-
-            if (result != null)
-            {
-                var newFilePath = Path.Combine(FileSystem.AppDataDirectory, result.FileName);
-
-                using (var stream = await result.OpenReadAsync())
-                using (var newStream = File.OpenWrite(newFilePath))
-                {
-                    await stream.CopyToAsync(newStream);
-                }
-
-                AvatarPath = newFilePath;
-            }
-        }
-        catch (Exception ex)
-        {
-            await Shell.Current.DisplayAlert("Błąd", ex.Message, "OK");
-        }
-    }
-
-    private void MapSubscriptionToProperties(SubscriptionDto subscription)
-    {
-        Name = subscription.Name;
-        Price = subscription.Price;
-        StartDate = subscription.DateFrom;
-        EndDate = subscription.DateTo;
-        AvatarPath = subscription.AvatarPath;
-    }
-
-    private void MapPropertiesToSubscription(SubscriptionDto subscription)
-    {
-        subscription.Name = Name;
-        subscription.Price = Price;
-        subscription.DateFrom = StartDate;
-        subscription.DateTo = EndDate;
-        subscription.AvatarPath = AvatarPath;
-    }
-}
----
-Plik: SubscriptionManager.UI\ViewModels\SubscriptionListViewModel.cs
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using SubscriptionManager.Application.DTOs;
-using SubscriptionManager.Application.Interfaces;
-using System.Collections.ObjectModel;
-
-namespace SubscriptionManager.UI.ViewModels;
-
-public partial class SubscriptionListViewModel : ObservableObject
-{
-    private readonly ISubscriptionService _subscriptionService;
-
-    [ObservableProperty]
-    private SubscriptionDto? _selectedSubscription;
-
-    [ObservableProperty]
-    public ObservableCollection<SubscriptionDto> subscriptions;
-
-    public SubscriptionListViewModel(ISubscriptionService subscriptionService)
-    {
-        _subscriptionService = subscriptionService;
-        Subscriptions = new ObservableCollection<SubscriptionDto>();
-    }
-
-    [RelayCommand]
-    void Appearing()
-    {
-        LoadSubscriptionsCommand.Execute(null);
-    }
-
-    [RelayCommand]
-    private async Task LoadSubscriptions()
-    {
-        var subs = await _subscriptionService.GetAllSubscriptionsAsync();
-        Subscriptions.Clear();
-        foreach (var sub in subs)
-        {
-            Subscriptions.Add(sub);
-        }
-    }
-
-    [RelayCommand]
-    private async Task AddSubscription()
-    {
-        await Shell.Current.GoToAsync("edit");
-    }
-
-    [RelayCommand]
-    private async Task SelectedSubscriptionChanged(SubscriptionDto selectedSubscription)
-    {
-        if (selectedSubscription != null)
-        {
-            Dictionary<string, object> parameters = new Dictionary<string, object>
-                {
-                    { "id",selectedSubscription.Id}
-                };
-
-            await Shell.Current.GoToAsync("edit", parameters);
-            SelectedSubscription = null;
-        }
-    }
-}
----
-Plik: SubscriptionManager.UI\Views\SubscriptionEditPage.xaml.cs
-using SubscriptionManager.UI.ViewModels;
-
-namespace SubscriptionManager.UI.Views;
-
-public partial class SubscriptionEditPage : ContentPage
-{
-    public SubscriptionEditPage(SubscriptionEditViewModel viewModel)
-    {
-        InitializeComponent();
-        BindingContext = viewModel;
-    }
-}
----
-Plik: SubscriptionManager.UI\Views\SubscriptionListPage.xaml.cs
-using SubscriptionManager.UI.ViewModels;
-
-namespace SubscriptionManager.UI.Views;
-
-public partial class SubscriptionListPage : ContentPage
-{
-    public SubscriptionListPage(SubscriptionListViewModel viewModel)
-    {
-        InitializeComponent();
-        BindingContext = viewModel;
-    }
-}
----
-Plik: SubscriptionManager.Application\DTOs\SubscriptionDto.cs
-namespace SubscriptionManager.Application.DTOs;
-
-public class SubscriptionDto
-{
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public DateTime DateFrom { get; set; }
-    public DateTime DateTo { get; set; }
-    public decimal Price { get; set; }
-    public string AvatarPath { get; set; }
-}
----
-Plik: SubscriptionManager.Application\Interfaces\ISubscriptionService.cs
-using SubscriptionManager.Application.DTOs;
-
-namespace SubscriptionManager.Application.Interfaces;
-
-public interface ISubscriptionService
-{
-    Task<IEnumerable<SubscriptionDto>> GetAllSubscriptionsAsync();
-    Task<SubscriptionDto> GetSubscriptionByIdAsync(Guid id);
-    Task AddSubscriptionAsync(SubscriptionDto subscriptionDto);
-    Task UpdateSubscriptionAsync(SubscriptionDto subscriptionDto);
-    Task DeleteSubscriptionAsync(Guid id);
-}
----
-Plik: SubscriptionManager.Application\Services\SubscriptionService.cs
-using SubscriptionManager.Application.DTOs;
-using SubscriptionManager.Application.Interfaces;
 using SubscriptionManager.Domain.Entities;
 using SubscriptionManager.Domain.Interfaces;
 
-namespace SubscriptionManager.Application.Services;
+namespace SubscriptionManager.Application.Tests;
 
-public class SubscriptionService : ISubscriptionService
+public class SubscriptionServiceTests
 {
-    private readonly ISubscriptionRepository _subscriptionRepository;
-
-    public SubscriptionService(ISubscriptionRepository subscriptionRepository)
+    [Fact]
+    public async Task AddSubscription_Should_Add_Subscription_To_Repository()
     {
-        _subscriptionRepository = subscriptionRepository;
-    }
+        // Arrange
+        var subscriptionList = new List<Subscription>();
+        var repositoryMock = new Mock<ISubscriptionRepository>();
 
-    public async Task<IEnumerable<SubscriptionDto>> GetAllSubscriptionsAsync()
-    {
-        var subscriptions = await _subscriptionRepository.GetAllAsync();
-        return subscriptions.Select(s => new SubscriptionDto
+        // Konfiguracja metody AddAsync: dodajemy encję do listy
+        repositoryMock.Setup(r => r.AddAsync(It.IsAny<Subscription>()))
+            .Returns((Subscription s) =>
+            {
+                subscriptionList.Add(s);
+                return Task.CompletedTask;
+            });
+
+        // Konfiguracja metody GetAllAsync: zwracamy stan listy
+        repositoryMock.Setup(r => r.GetAllAsync())
+            .ReturnsAsync(() => subscriptionList);
+
+        var subscriptionService = new SubscriptionService(repositoryMock.Object);
+        var subscriptionDto = new SubscriptionDto
         {
-            Id = s.Id,
-            Name = s.Name,
-            DateFrom = s.DateFrom,
-            DateTo = s.DateTo,
-            Price = s.Price,
-            AvatarPath = s.AvatarPath
-        });
-    }
-
-    public async Task<SubscriptionDto> GetSubscriptionByIdAsync(Guid id)
-    {
-        var subscription = await _subscriptionRepository.GetByIdAsync(id);
-        if (subscription == null)
-            return null;
-
-        return new SubscriptionDto
-        {
-            Id = subscription.Id,
-            Name = subscription.Name,
-            DateFrom = subscription.DateFrom,
-            DateTo = subscription.DateTo,
-            Price = subscription.Price,
-            AvatarPath = subscription.AvatarPath
+            Name = "Test Subscription",
+            DateFrom = DateTime.Today,
+            DateTo = DateTime.Today.AddMonths(1),
+            Price = 20.0m,
+            AvatarPath = "avatar.png"
         };
+
+        // Act
+        await subscriptionService.AddSubscriptionAsync(subscriptionDto);
+
+        // Assert
+        Assert.Single(subscriptionList);
+        var added = subscriptionList.First();
+        Assert.Equal(subscriptionDto.Name, added.Name);
+
+        // Dodatkowa weryfikacja wywołania metody AddAsync dokładnie raz
+        repositoryMock.Verify(r => r.AddAsync(It.IsAny<Subscription>()), Times.Once);
     }
 
-    public async Task AddSubscriptionAsync(SubscriptionDto subscriptionDto)
+    [Fact]
+    public async Task UpdateSubscription_Should_Update_Existing_Subscription()
     {
-        var subscription = new Subscription(
-            subscriptionDto.Name,
-            subscriptionDto.DateFrom,
-            subscriptionDto.DateTo,
-            subscriptionDto.Price,
-            subscriptionDto.AvatarPath);
+        // Arrange
+        var subscriptionList = new List<Subscription>();
+        var repositoryMock = new Mock<ISubscriptionRepository>();
 
-        await _subscriptionRepository.AddAsync(subscription);
-    }
+        // Konfiguracja: metoda AddAsync – zapisujemy do listy
+        repositoryMock.Setup(r => r.AddAsync(It.IsAny<Subscription>()))
+            .Returns((Subscription s) =>
+            {
+                subscriptionList.Add(s);
+                return Task.CompletedTask;
+            });
 
-    public async Task UpdateSubscriptionAsync(SubscriptionDto subscriptionDto)
-    {
-        var subscription = await _subscriptionRepository.GetByIdAsync(subscriptionDto.Id);
-        if (subscription == null)
+        // Konfiguracja: metoda GetAllAsync – zwracamy stan listy
+        repositoryMock.Setup(r => r.GetAllAsync())
+            .ReturnsAsync(() => subscriptionList);
+
+        // Konfiguracja: metoda GetByIdAsync – wyszukujemy w liście po identyfikatorze
+        repositoryMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>()))
+            .ReturnsAsync((Guid id) => subscriptionList.FirstOrDefault(s => s.Id == id));
+
+        // Konfiguracja: metoda UpdateAsync – aktualizujemy element w liście
+        repositoryMock.Setup(r => r.UpdateAsync(It.IsAny<Subscription>()))
+            .Returns((Subscription s) =>
+            {
+                var index = subscriptionList.FindIndex(x => x.Id == s.Id);
+                if (index != -1)
+                    subscriptionList[index] = s;
+                return Task.CompletedTask;
+            });
+
+        var subscriptionService = new SubscriptionService(repositoryMock.Object);
+
+        // Najpierw dodajemy subskrypcję
+        var subscriptionDto = new SubscriptionDto
         {
-            throw new KeyNotFoundException($"Subskrypcja o identyfikatorze {subscriptionDto.Id} nie została znaleziona.");
-        }
+            Name = "Initial Subscription",
+            DateFrom = DateTime.Today,
+            DateTo = DateTime.Today.AddMonths(1),
+            Price = 15.0m,
+            AvatarPath = "initial.png"
+        };
+        await subscriptionService.AddSubscriptionAsync(subscriptionDto);
 
-        subscription.UpdateSubscription(
-            subscriptionDto.Name,
-            subscriptionDto.DateFrom,
-            subscriptionDto.DateTo,
-            subscriptionDto.Price,
-            subscriptionDto.AvatarPath);
+        // Pobieramy dodaną subskrypcję (przyjmujemy, że lista zawiera tylko jedną)
+        var addedSubscription = subscriptionList.First();
 
-        await _subscriptionRepository.UpdateAsync(subscription);
-    }
-    public async Task DeleteSubscriptionAsync(Guid id)
-    {
-        await _subscriptionRepository.DeleteAsync(id);
+        // Przygotowujemy dane do aktualizacji – Id musi być zgodne z istniejącą subskrypcją
+        var updatedDto = new SubscriptionDto
+        {
+            Id = addedSubscription.Id,
+            Name = "Updated Subscription",
+            DateFrom = DateTime.Today.AddDays(1),
+            DateTo = DateTime.Today.AddMonths(2),
+            Price = 25.0m,
+            AvatarPath = "updated.png"
+        };
+
+        // Act
+        await subscriptionService.UpdateSubscriptionAsync(updatedDto);
+
+        // Assert
+        var updatedSubscription = subscriptionList.FirstOrDefault(s => s.Id == addedSubscription.Id);
+        Assert.NotNull(updatedSubscription);
+        Assert.Equal(updatedDto.Name, updatedSubscription.Name);
+        Assert.Equal(updatedDto.DateFrom, updatedSubscription.DateFrom);
+        Assert.Equal(updatedDto.DateTo, updatedSubscription.DateTo);
+        Assert.Equal(updatedDto.Price, updatedSubscription.Price);
+        Assert.Equal(updatedDto.AvatarPath, updatedSubscription.AvatarPath);
+
+        // Weryfikacja, że UpdateAsync zostało wywołane dokładnie raz
+        repositoryMock.Verify(r => r.UpdateAsync(It.IsAny<Subscription>()), Times.Once);
     }
 }
 ---
-Plik: SubscriptionManager.Domain\Entities\Subscription.cs
+Plik: SubscriptionManager.Tests\Domain\SubscriptionTests.cs
+using SubscriptionManager.Domain.Entities;
 using SubscriptionManager.Domain.Exceptions;
 
-namespace SubscriptionManager.Domain.Entities;
+namespace SubscriptionManager.Domain.Tests;
 
-
-public class Subscription
+public class SubscriptionTests
 {
-    public Guid Id { get; private set; }
-    public string Name { get; private set; }
-    public DateTime DateFrom { get; private set; }
-    public DateTime DateTo { get; private set; }
-    public decimal Price { get; private set; }
-    public string AvatarPath { get; private set; }
-    public Subscription(string name, DateTime dateFrom, DateTime dateTo, decimal price, string avatarPath)
+    [Fact]
+    public void Should_Create_Subscription_With_Valid_Parameters()
     {
-        ValidateParameters(name, dateFrom, dateTo, price);
+        // Arrange
+        var name = "Test Subscription";
+        var dateFrom = DateTime.Today;
+        var dateTo = DateTime.Today.AddMonths(1);
+        decimal price = 10.99m;
+        var avatarPath = "path/to/avatar.png";
 
-        Id = Guid.NewGuid();
-        Name = name;
-        DateFrom = dateFrom;
-        DateTo = dateTo;
-        Price = price;
-        AvatarPath = avatarPath;
+        // Act
+        var subscription = new Subscription(name, dateFrom, dateTo, price, avatarPath);
+
+        // Assert
+        Assert.NotEqual(Guid.Empty, subscription.Id);
+        Assert.Equal(name, subscription.Name);
+        Assert.Equal(dateFrom, subscription.DateFrom);
+        Assert.Equal(dateTo, subscription.DateTo);
+        Assert.Equal(price, subscription.Price);
+        Assert.Equal(avatarPath, subscription.AvatarPath);
     }
 
-    public void UpdateSubscription(string name, DateTime dateFrom, DateTime dateTo, decimal price, string avatarPath)
+    [Fact]
+    public void Should_Throw_Exception_When_DateFrom_Is_Greater_Than_DateTo()
     {
-        ValidateParameters(name, dateFrom, dateTo, price);
+        // Arrange
+        var name = "Invalid Subscription";
+        var dateFrom = DateTime.Today.AddMonths(1);
+        var dateTo = DateTime.Today;
+        decimal price = 10.99m;
+        var avatarPath = "avatar.png";
 
-        Name = name;
-        DateFrom = dateFrom;
-        DateTo = dateTo;
-        Price = price;
-        AvatarPath = avatarPath;
+        // Act & Assert
+        Assert.Throws<SubscriptionDomainException>(
+            () => new Subscription(name, dateFrom, dateTo, price, avatarPath)
+        );
     }
 
-    private void ValidateParameters(string name, DateTime dateFrom, DateTime dateTo, decimal price)
+    [Fact]
+    public void Should_Update_Subscription_Correctly()
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Nazwa subskrypcji nie może być pusta.", nameof(name));
+        // Arrange
+        var subscription = new Subscription("Initial Name", DateTime.Today, DateTime.Today.AddMonths(1), 15m, "initial.png");
+        var newName = "Updated Name";
+        var newDateFrom = DateTime.Today.AddDays(1);
+        var newDateTo = DateTime.Today.AddMonths(2);
+        decimal newPrice = 20m;
+        var newAvatarPath = "updated.png";
 
-        if (dateFrom > dateTo)
-            throw new SubscriptionDomainException("Data rozpoczęcia nie może być późniejsza niż data zakończenia.");
+        // Act
+        subscription.UpdateSubscription(newName, newDateFrom, newDateTo, newPrice, newAvatarPath);
 
-        if (price < 0)
-            throw new ArgumentException("Cena nie może być ujemna.", nameof(price));
-    }
-}
----
-Plik: SubscriptionManager.Domain\Exceptions\SubscriptionDomainException.cs
-namespace SubscriptionManager.Domain.Exceptions;
-
-public class SubscriptionDomainException : Exception
-{
-    public SubscriptionDomainException() { }
-
-    public SubscriptionDomainException(string message)
-        : base(message)
-    {
-    }
-
-    public SubscriptionDomainException(string message, Exception innerException)
-        : base(message, innerException)
-    {
-    }
-}
----
-Plik: SubscriptionManager.Domain\Interfaces\ISubscriptionRepository.cs
-using SubscriptionManager.Domain.Entities;
-
-namespace SubscriptionManager.Domain.Interfaces;
-
-public interface ISubscriptionRepository
-{
-    Task<IEnumerable<Subscription>> GetAllAsync();
-    Task<Subscription> GetByIdAsync(Guid id);
-    Task AddAsync(Subscription subscription);
-    Task UpdateAsync(Subscription subscription);
-    Task DeleteAsync(Guid id);
-}
----
-Plik: SubscriptionManager.Infrastructure\Repositories\InMemorySubscriptionRepository.cs
-using SubscriptionManager.Domain.Entities;
-using SubscriptionManager.Domain.Interfaces;
-
-namespace SubscriptionManager.Infrastructure.Repositories;
-
-public class InMemorySubscriptionRepository : ISubscriptionRepository
-{
-    private readonly List<Subscription> _subscriptions = new();
-
-    public Task<IEnumerable<Subscription>> GetAllAsync()
-    {
-
-        _subscriptions.Add(new Subscription("Prime Video", DateTime.Now, DateTime.Now.AddDays(1), 50, "dotnet_bot.png"));
-
-        return Task.FromResult(_subscriptions.AsEnumerable());
-    }
-
-    public Task<Subscription> GetByIdAsync(Guid id)
-    {
-        var subscription = _subscriptions.FirstOrDefault(s => s.Id == id);
-        return Task.FromResult(subscription);
-    }
-
-    public Task AddAsync(Subscription subscription)
-    {
-        if (subscription == null)
-            throw new ArgumentNullException(nameof(subscription));
-
-        _subscriptions.Add(subscription);
-        return Task.CompletedTask;
-    }
-
-    public Task UpdateAsync(Subscription subscription)
-    {
-        if (subscription == null)
-            throw new ArgumentNullException(nameof(subscription));
-
-        var index = _subscriptions.FindIndex(s => s.Id == subscription.Id);
-        if (index != -1)
-        {
-            _subscriptions[index] = subscription;
-        }
-        else
-        {
-            throw new KeyNotFoundException($"Subskrypcja o identyfikatorze {subscription.Id} nie została znaleziona.");
-        }
-
-        return Task.CompletedTask;
-    }
-    public Task DeleteAsync(Guid id)
-    {
-        var subscription = _subscriptions.FirstOrDefault(s => s.Id == id);
-        if (subscription != null)
-        {
-            _subscriptions.Remove(subscription);
-        }
-        else
-        {
-            throw new KeyNotFoundException($"Subskrypcja o identyfikatorze {id} nie została znaleziona.");
-        }
-
-        return Task.CompletedTask;
+        // Assert
+        Assert.Equal(newName, subscription.Name);
+        Assert.Equal(newDateFrom, subscription.DateFrom);
+        Assert.Equal(newDateTo, subscription.DateTo);
+        Assert.Equal(newPrice, subscription.Price);
+        Assert.Equal(newAvatarPath, subscription.AvatarPath);
     }
 }
 ---
