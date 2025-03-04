@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using PanCardView;
 using SubscriptionManager.Application.Interfaces;
 using SubscriptionManager.Application.Services;
 using SubscriptionManager.Domain.Interfaces;
@@ -18,6 +19,7 @@ public static class MauiProgram
         builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkit()
+            .UseCardsView()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

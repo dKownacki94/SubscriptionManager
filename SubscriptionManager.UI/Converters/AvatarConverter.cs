@@ -7,7 +7,7 @@ public class AvatarConverter : IValueConverter
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         string path = value as string;
-        if (string.IsNullOrEmpty(path) || !File.Exists(path))
+        if (string.IsNullOrEmpty(path))
         {
             return "logo_netflix.png";
         }

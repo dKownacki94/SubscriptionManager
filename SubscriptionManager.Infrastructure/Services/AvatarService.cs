@@ -9,6 +9,9 @@ public class AvatarService : IAvatarService
         return new List<string>
         {
             "logo_netflix.png",
-            "dotnet_bot.png"        };
+            "logo_prime.png",
+            "logo_xbox.png",
+            "dotnet_bot.png",
+            "logo_upload.png"};
     }
 }

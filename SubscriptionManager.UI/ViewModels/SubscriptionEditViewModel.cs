@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using SubscriptionManager.Application.DTOs;
 using SubscriptionManager.Application.Interfaces;
+using System.Collections.ObjectModel;
 
 namespace SubscriptionManager.UI.ViewModels;
 
@@ -9,8 +10,12 @@ namespace SubscriptionManager.UI.ViewModels;
 public partial class SubscriptionEditViewModel : ObservableObject
 {
     private readonly ISubscriptionService _subscriptionService;
+    private readonly IAvatarService _avatarService;
 
     private SubscriptionDto _subscription;
+
+    [ObservableProperty]
+    private string pageTitle = "Dodaj Subskrypcję";
 
     [ObservableProperty]
     private Guid _subscriptionId;
@@ -28,19 +33,24 @@ public partial class SubscriptionEditViewModel : ObservableObject
     private DateTime _endDate = DateTime.Today.AddMonths(1);
 
     [ObservableProperty]
-    private string _avatarPath = "dotnet_bot.png";
+    private string _avatarPath = "logo_upload.png";
 
     [ObservableProperty]
-    private string pageTitle = "Dodaj Subskrypcję";
+    private int _selectedAvatarIndex;
 
-    public SubscriptionEditViewModel(ISubscriptionService subscriptionService)
+    [ObservableProperty]
+    private ObservableCollection<string> _avatars;
+
+    public SubscriptionEditViewModel(ISubscriptionService subscriptionService, IAvatarService avatarService)
     {
         _subscriptionService = subscriptionService;
+        _avatarService = avatarService;
         _subscription = new SubscriptionDto()
         {
             DateFrom = DateTime.Today,
             DateTo = DateTime.Today.AddMonths(1)
         };
+        Avatars = new ObservableCollection<string>(_avatarService.GetAvailableAvatars());
     }
 
     [RelayCommand]
@@ -52,17 +62,21 @@ public partial class SubscriptionEditViewModel : ObservableObject
     [RelayCommand]
     private async Task LoadSubscriptionAsync()
     {
-        if (SubscriptionId != Guid.Empty)
+        if (SubscriptionId == Guid.Empty)
         {
-            var subscription = await _subscriptionService.GetSubscriptionByIdAsync(SubscriptionId);
-            if (subscription != null)
-            {
-                _subscription = subscription;
-                MapSubscriptionToProperties(_subscription);
-                PageTitle = "Edytuj Subskrypcję";
-                return;
-            }
+            return;
         }
+
+        var subscription = await _subscriptionService.GetSubscriptionByIdAsync(SubscriptionId);
+        if (subscription == null)
+        {
+            return;
+        }
+
+        _subscription = subscription;
+        MapSubscriptionToProperties(_subscription);
+        HandleAvatar(_subscription.AvatarPath);
+        PageTitle = "Edytuj Subskrypcję";
     }
 
     [RelayCommand]
@@ -158,5 +172,24 @@ public partial class SubscriptionEditViewModel : ObservableObject
         subscription.DateFrom = StartDate;
         subscription.DateTo = EndDate;
         subscription.AvatarPath = AvatarPath;
+    }
+
+    private void HandleAvatar(string avatarPath)
+    {
+        if (string.IsNullOrEmpty(avatarPath))
+        {
+            return;
+        }
+
+        if (!Avatars.Contains(avatarPath))
+        {
+            Avatars.Add(avatarPath);
+        }
+
+        var index = Avatars.IndexOf(avatarPath);
+        if (index >= 0)
+        {
+            SelectedAvatarIndex = index;
+        }
     }
 }

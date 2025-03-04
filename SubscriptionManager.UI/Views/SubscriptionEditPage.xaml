@@ -4,8 +4,10 @@
              xmlns:viewmodels="clr-namespace:SubscriptionManager.UI.ViewModels"
              x:Class="SubscriptionManager.UI.Views.SubscriptionEditPage"
              xmlns:toolkit="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
+             xmlns:cards="clr-namespace:PanCardView;assembly=PanCardView"
+             xmlns:controls="clr-namespace:PanCardView.Controls;assembly=PanCardView"
              Title="Dodaj/edytuj subskrypcje">
-    
+
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior 
             EventName="Appearing" 
@@ -13,38 +15,66 @@
     </ContentPage.Behaviors>
 
     <ScrollView>
-        <StackLayout Padding="20" Spacing="15">
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <Label Text="Wybierz avatar:" FontSize="Medium" />
+            <cards:CarouselView x:Name="AvatarCarousel"
+                                ItemsSource="{Binding Avatars}"
+                                SelectedItem="{Binding AvatarPath, Mode=TwoWay}"
+                                HeightRequest="100" 
+                                WidthRequest="300"
+                                HorizontalOptions="Center"
+                                IsCyclical="True">
+                <cards:CarouselView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10">
+                            <Frame HeightRequest="70" 
+                                   WidthRequest="70" 
+                                   CornerRadius="50" 
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   Padding="0" 
+                                   IsClippedToBounds="True"
+                                   BorderColor="LightGray">
+                                <Image Source="{Binding .}"
+                                       Aspect="AspectFit"
+                                       HeightRequest="60"
+                                       WidthRequest="60"/>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </cards:CarouselView.ItemTemplate>
+            </cards:CarouselView>
 
-            <!-- Avatar -->
-            <Image Source="{Binding AvatarPath, Converter={StaticResource AvatarConverter}}"
-                   WidthRequest="100"
-                   HeightRequest="100"
-                   Aspect="AspectFill"
-                   HorizontalOptions="Center" />
+            <!-- Pozostałe pola formularza -->
+            <Label Text="Nazwa:" FontSize="Medium" />
+            <Entry Text="{Binding Name}" Placeholder="Nazwa subskrypcji" />
 
-            <Button Text="Wybierz Avatar" Command="{Binding PickAvatarCommand}" />
+            <Label Text="Cena (zł/miesiąc):" FontSize="Medium" />
+            <Entry Text="{Binding Price}" Keyboard="Numeric" Placeholder="0.00" />
 
-            <!-- Nazwa -->
-            <Entry Placeholder="Nazwa subskrypcji"
-                   Text="{Binding Name}" />
-
-            <!-- Cena -->
-            <Entry Placeholder="Cena"
-                   Keyboard="Numeric"
-                   Text="{Binding Price, StringFormat='{0:F2}'}" />
-
-            <!-- Data Startu -->
+            <Label Text="Data rozpoczęcia:" FontSize="Medium" />
             <DatePicker Date="{Binding StartDate}" />
 
-            <!-- Data Zakończenia -->
+            <Label Text="Data zakończenia:" FontSize="Medium" />
             <DatePicker Date="{Binding EndDate}" />
 
-            <!-- Przyciski Akcji -->
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="20">
-                <Button Text="Zapisz" Command="{Binding SaveCommand}" />
-                <Button Text="Usuń" Command="{Binding DeleteCommand}" />
-                <Button Text="Anuluj" Command="{Binding CancelCommand}" />
-            </StackLayout>
-        </StackLayout>
+            <!-- Przyciski akcji -->
+            <Grid ColumnDefinitions="*, *, *" ColumnSpacing="10" Margin="0,20,0,0">
+                <Button Text="Anuluj" 
+                        Command="{Binding CancelCommand}"
+                        Grid.Column="0" />
+
+                <Button Text="Usuń" 
+                        Command="{Binding DeleteCommand}"
+                        IsVisible="{Binding SubscriptionId, Converter={StaticResource GuidIsNotEmptyConverter}}"
+                        BackgroundColor="Red"
+                        Grid.Column="1" />
+
+                <Button Text="Zapisz" 
+                        Command="{Binding SaveCommand}"
+                        BackgroundColor="Green"
+                        Grid.Column="2" />
+            </Grid>
+        </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
