@@ -36,9 +36,6 @@ public partial class SubscriptionEditViewModel : ObservableObject
     private string _avatarPath = "logo_upload.png";
 
     [ObservableProperty]
-    private int _selectedAvatarIndex;
-
-    [ObservableProperty]
     private ObservableCollection<string> _avatars;
 
     public SubscriptionEditViewModel(ISubscriptionService subscriptionService, IAvatarService avatarService)
@@ -127,6 +124,15 @@ public partial class SubscriptionEditViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private async Task AvatarTappedAsync()
+    {
+        if (AvatarPath == "logo_upload.png")
+        {
+            await PickAvatarAsync();
+        }
+    }
+
+    [RelayCommand]
     private async Task PickAvatarAsync()
     {
         try
@@ -145,6 +151,11 @@ public partial class SubscriptionEditViewModel : ObservableObject
                 using (var newStream = File.OpenWrite(newFilePath))
                 {
                     await stream.CopyToAsync(newStream);
+                }
+
+                if (!Avatars.Contains(newFilePath))
+                {
+                    Avatars.Add(newFilePath);
                 }
 
                 AvatarPath = newFilePath;
@@ -176,20 +187,13 @@ public partial class SubscriptionEditViewModel : ObservableObject
 
     private void HandleAvatar(string avatarPath)
     {
-        if (string.IsNullOrEmpty(avatarPath))
-        {
-            return;
-        }
+        if (string.IsNullOrEmpty(avatarPath)) return;
 
         if (!Avatars.Contains(avatarPath))
         {
             Avatars.Add(avatarPath);
         }
 
-        var index = Avatars.IndexOf(avatarPath);
-        if (index >= 0)
-        {
-            SelectedAvatarIndex = index;
-        }
+        AvatarPath = avatarPath;
     }
 }
