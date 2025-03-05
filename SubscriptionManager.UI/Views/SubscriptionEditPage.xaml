@@ -5,104 +5,153 @@
              x:Class="SubscriptionManager.UI.Views.SubscriptionEditPage"
              xmlns:toolkit="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
              xmlns:cards="clr-namespace:PanCardView;assembly=PanCardView"
+             xmlns:controls="clr-namespace:PanCardView.Controls;assembly=PanCardView"
              Title="Dodaj/edytuj subskrypcje"
-             BackgroundColor="#F5F5F5">
+             BackgroundColor="#F4F4F4">
 
     <ContentPage.Behaviors>
-        <toolkit:EventToCommandBehavior 
-            EventName="Appearing" 
-            Command="{Binding AppearingCommand}"/>
+        <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"/>
     </ContentPage.Behaviors>
 
     <ScrollView>
-        <VerticalStackLayout Padding="25" Spacing="20">
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- Avatar Selection Section -->
+            <Frame BackgroundColor="White" 
+                   BorderColor="#E0E0E0" 
+                   CornerRadius="10" 
+                   Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Wybierz avatar:" 
+                           FontSize="Medium" 
+                           FontAttributes="Bold" 
+                           TextColor="#333333" 
+                           HorizontalOptions="Center"/>
 
-            <Label Text="Wybierz avatar:" 
-                   FontSize="Medium" 
-                   FontAttributes="Bold" 
-                   TextColor="#333333"/>
-
-            <cards:CarouselView x:Name="AvatarCarousel"
-                                ItemsSource="{Binding Avatars}"
-                                SelectedItem="{Binding AvatarPath, Mode=TwoWay}"
-                                HeightRequest="120" 
-                                WidthRequest="320"
-                                HorizontalOptions="Center"
-                                IsCyclical="True">
-                <cards:CarouselView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Padding="10">
-                            <Frame HeightRequest="80" 
-                                   WidthRequest="80" 
-                                   CornerRadius="40" 
-                                   HorizontalOptions="Center"
-                                   VerticalOptions="Center"
-                                   Padding="0" 
-                                   IsClippedToBounds="True"
-                                   BorderColor="LightGray"
-                                   BackgroundColor="White" 
-                                   HasShadow="True">
-                                <Image Source="{Binding .}"
-                                       Aspect="AspectFit"
-                                       HeightRequest="70"
-                                       WidthRequest="70">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SubscriptionEditViewModel}}, Path=AvatarTappedCommand}" />
-                                    </Image.GestureRecognizers>
-                                </Image>
-                            </Frame>
-                        </Grid>
-                    </DataTemplate>
-                </cards:CarouselView.ItemTemplate>
-            </cards:CarouselView>
-
-            <Frame CornerRadius="10" Padding="10" BackgroundColor="White" HasShadow="True">
-                <VerticalStackLayout Spacing="15">
-                    <Label Text="Nazwa:" FontSize="Medium" FontAttributes="Bold" TextColor="#333333"/>
-                    <Entry Text="{Binding Name}" 
-                           Placeholder="Nazwa subskrypcji" 
-                           BackgroundColor="#F0F0F0" />
-
-                    <Label Text="Cena (zł/miesiąc):" FontSize="Medium" FontAttributes="Bold" TextColor="#333333"/>
-                    <Entry Text="{Binding Price}" 
-                           Keyboard="Numeric" 
-                           Placeholder="0.00" 
-                           BackgroundColor="#F0F0F0" />
-
-                    <Label Text="Data rozpoczęcia:" FontSize="Medium" FontAttributes="Bold" TextColor="#333333"/>
-                    <DatePicker Date="{Binding StartDate}" />
-
-                    <Label Text="Data zakończenia:" FontSize="Medium" FontAttributes="Bold" TextColor="#333333"/>
-                    <DatePicker Date="{Binding EndDate}" />
+                    <cards:CarouselView x:Name="AvatarCarousel" 
+                                        ItemsSource="{Binding Avatars}" 
+                                        SelectedItem="{Binding AvatarPath, Mode=TwoWay}" 
+                                        HeightRequest="120" 
+                                        WidthRequest="350" 
+                                        HorizontalOptions="Center" 
+                                        IsCyclical="True">
+                        <cards:CarouselView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="10">
+                                    <Frame HeightRequest="100" 
+                                           WidthRequest="100" 
+                                           CornerRadius="50" 
+                                           HorizontalOptions="Center" 
+                                           VerticalOptions="Center" 
+                                           Padding="0" 
+                                           IsClippedToBounds="True" 
+                                           BorderColor="#CCCCCC" 
+                                           Shadow="{StaticResource DefaultShadow}">
+                                        <Image Source="{Binding .}" 
+                                               Aspect="AspectFit" 
+                                               HeightRequest="90" 
+                                               WidthRequest="90">
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SubscriptionEditViewModel}}, Path=AvatarTappedCommand}" />
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                    </Frame>
+                                </Grid>
+                            </DataTemplate>
+                        </cards:CarouselView.ItemTemplate>
+                    </cards:CarouselView>
                 </VerticalStackLayout>
             </Frame>
 
-            <Grid ColumnDefinitions="*, *, *" ColumnSpacing="15" Margin="0,25,0,0">
+            <!-- Form Fields Section -->
+            <Frame BackgroundColor="White" 
+                   BorderColor="#E0E0E0" 
+                   CornerRadius="10" 
+                   Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <!-- Name Field -->
+                    <VerticalStackLayout>
+                        <Label Text="Nazwa:" 
+                               FontSize="Medium" 
+                               TextColor="#333333" 
+                               Margin="0,0,0,5"/>
+                        <Entry Text="{Binding Name}" 
+                               Placeholder="Nazwa subskrypcji" 
+                               BackgroundColor="#F9F9F9" 
+                               HeightRequest="50"/>
+                    </VerticalStackLayout>
+
+                    <!-- Price Field -->
+                    <VerticalStackLayout>
+                        <Label Text="Cena (zł/miesiąc):" 
+                               FontSize="Medium" 
+                               TextColor="#333333" 
+                               Margin="0,0,0,5"/>
+                        <Entry Text="{Binding Price}" 
+                               Keyboard="Numeric" 
+                               Placeholder="0.00" 
+                               BackgroundColor="#F9F9F9" 
+                               HeightRequest="50"/>
+                    </VerticalStackLayout>
+
+                    <!-- Start Date Field -->
+                    <VerticalStackLayout>
+                        <Label Text="Data rozpoczęcia:" 
+                               FontSize="Medium" 
+                               TextColor="#333333" 
+                               Margin="0,0,0,5"/>
+                        <DatePicker Date="{Binding StartDate}" 
+                                    BackgroundColor="#F9F9F9" 
+                                    TextColor="#333333"/>
+                    </VerticalStackLayout>
+
+                    <!-- End Date Field -->
+                    <VerticalStackLayout>
+                        <Label Text="Data zakończenia:" 
+                               FontSize="Medium" 
+                               TextColor="#333333" 
+                               Margin="0,0,0,5"/>
+                        <DatePicker Date="{Binding EndDate}" 
+                                    BackgroundColor="#F9F9F9" 
+                                    TextColor="#333333"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Action Buttons Section -->
+            <Grid ColumnDefinitions="*, *, *" 
+                  ColumnSpacing="10" 
+                  Margin="0,20,0,0">
                 <Button Text="Anuluj" 
-                        Command="{Binding CancelCommand}"
-                        Grid.Column="0"
-                        BackgroundColor="#D3D3D3"
-                    TextColor="Black"
-                        CornerRadius="10"
-                        Padding="10"/>
+                        Command="{Binding CancelCommand}" 
+                        Grid.Column="0" 
+                        BackgroundColor="#F0F0F0" 
+                        TextColor="#333333" 
+                        BorderColor="#CCCCCC" 
+                        BorderWidth="1"/>
 
-                    <Button Text="Usuń" 
-                        Command="{Binding DeleteCommand}"
-                        IsVisible="{Binding SubscriptionId, Converter={StaticResource GuidIsNotEmptyConverter}}"
-                        BackgroundColor="#FF5555" 
-                        TextColor="White"
-                        CornerRadius="10"
-                        Padding="10"
-                        Grid.Column="1"/>
+                <Button Text="Usuń" 
+                        Command="{Binding DeleteCommand}" 
+                        IsVisible="{Binding SubscriptionId, Converter={StaticResource GuidIsNotEmptyConverter}}" 
+                        Grid.Column="1" 
+                        BackgroundColor="#FF6B6B" 
+                        TextColor="White"/>
 
-                        <Button Text="Zapisz" 
-                        Command="{Binding SaveCommand}"
-                        BackgroundColor="#4CAF50"
-                        TextColor="White"
-                        CornerRadius="10"
-                        Padding="10"
-                        Grid.Column="2"/>
+                <Button Text="Zapisz" 
+                        Command="{Binding SaveCommand}" 
+                        Grid.Column="2" 
+                        BackgroundColor="#4CAF50" 
+                        TextColor="White"/>
             </Grid>
         </VerticalStackLayout>
     </ScrollView>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Shadow x:Key="DefaultShadow"
+                    Brush="Black"
+                    Opacity="0.2"
+                    Radius="10"
+                    Offset="5,5"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 </ContentPage>
