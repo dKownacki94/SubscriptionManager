@@ -4,44 +4,80 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
-
-    <Color x:Key="Primary">#4A90E2</Color>
-    <Color x:Key="PrimaryDark">#4178C0</Color>
-    <Color x:Key="PrimaryDarkText">#FFFFFF</Color>
-    <Color x:Key="Secondary">#D0E8F2</Color>
-    <Color x:Key="SecondaryDarkText">#2C3E50</Color>
+    <!-- Podstawowa paleta kolorów aplikacji -->
+    <Color x:Key="Primary">#2D5AF8</Color>
+    <Color x:Key="PrimaryDark">#1A46E0</Color>
+    <Color x:Key="PrimaryLight">#8FAFFF</Color>
+    <Color x:Key="Secondary">#F8F9FA</Color>
     <Color x:Key="Tertiary">#50E3C2</Color>
-    <Color x:Key="BackgroundColor">#f0f2f5</Color>
 
+    <!-- Kolory tła -->
+    <Color x:Key="BackgroundColor">#F0F2F5</Color>
+    <Color x:Key="SurfaceColor">White</Color>
+    <Color x:Key="CardBackgroundColor">White</Color>
+
+    <!-- Kolory tekstu -->
+    <Color x:Key="TextPrimary">#333333</Color>
+    <Color x:Key="TextSecondary">#666666</Color>
+    <Color x:Key="TextTertiary">#999999</Color>
+    <Color x:Key="TextOnPrimary">White</Color>
+
+    <!-- Kolory statusów -->
+    <Color x:Key="Success">#34A853</Color>
+    <Color x:Key="SuccessLight">#E6F4EA</Color>
+    <Color x:Key="Warning">#FBBC04</Color>
+    <Color x:Key="WarningLight">#FEF7E0</Color>
+    <Color x:Key="Danger">#DC3545</Color>
+    <Color x:Key="DangerLight">#FADDE0</Color>
+    <Color x:Key="Info">#4A90E2</Color>
+    <Color x:Key="InfoLight">#E3F2FD</Color>
+
+    <!-- Kolory obramowań -->
+    <Color x:Key="Border">#E0E0E0</Color>
+    <Color x:Key="BorderLight">#F0F0F0</Color>
+
+    <!-- Kolory podstawowe -->
     <Color x:Key="White">White</Color>
-    <Color x:Key="Black">Black</Color>
-    <Color x:Key="Magenta">#D600AA</Color>
-    <Color x:Key="MidnightBlue">#190649</Color>
-    <Color x:Key="OffBlack">#1f1f1f</Color>
+    <Color x:Key="Black">#1F1F1F</Color>
 
-    <Color x:Key="Gray100">#E1E1E1</Color>
-    <Color x:Key="Gray200">#C8C8C8</Color>
-    <Color x:Key="Gray300">#ACACAC</Color>
-    <Color x:Key="Gray400">#919191</Color>
-    <Color x:Key="Gray500">#6E6E6E</Color>
-    <Color x:Key="Gray600">#404040</Color>
-    <Color x:Key="Gray900">#212121</Color>
-    <Color x:Key="Gray950">#141414</Color>
+    <!-- Odcienie szarości -->
+    <Color x:Key="Gray100">#F8F9FA</Color>
+    <Color x:Key="Gray200">#E9ECEF</Color>
+    <Color x:Key="Gray300">#DEE2E6</Color>
+    <Color x:Key="Gray400">#CED4DA</Color>
+    <Color x:Key="Gray500">#ADB5BD</Color>
+    <Color x:Key="Gray600">#6C757D</Color>
+    <Color x:Key="Gray700">#495057</Color>
+    <Color x:Key="Gray800">#343A40</Color>
+    <Color x:Key="Gray900">#212529</Color>
 
+    <!-- Pędzle kolorów -->
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>
     <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}"/>
-    <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource White}"/>
-    <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource Black}"/>
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}"/>
+    <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}"/>
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimary}"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondary}"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource Border}"/>
 
-    <SolidColorBrush x:Key="Gray100Brush" Color="{StaticResource Gray100}"/>
-    <SolidColorBrush x:Key="Gray200Brush" Color="{StaticResource Gray200}"/>
-    <SolidColorBrush x:Key="Gray300Brush" Color="{StaticResource Gray300}"/>
-    <SolidColorBrush x:Key="Gray400Brush" Color="{StaticResource Gray400}"/>
-    <SolidColorBrush x:Key="Gray500Brush" Color="{StaticResource Gray500}"/>
-    <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}"/>
-    <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
-    <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
-    
+    <!-- Cienie -->
+    <Shadow x:Key="SmallShadow"
+            Brush="#20000000"
+            Opacity="1"
+            Radius="4"
+            Offset="0,2"/>
+
+    <Shadow x:Key="MediumShadow"
+            Brush="#20000000"
+            Opacity="1"
+            Radius="8"
+            Offset="0,4"/>
+
+    <Shadow x:Key="LargeShadow"
+            Brush="#20000000"
+            Opacity="1"
+            Radius="16"
+            Offset="0,8"/>
+
 </ResourceDictionary>

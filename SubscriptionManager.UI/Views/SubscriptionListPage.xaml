@@ -4,57 +4,8 @@
              x:Class="SubscriptionManager.UI.Views.SubscriptionListPage"
              xmlns:viewmodels="clr-namespace:SubscriptionManager.UI.ViewModels"
              xmlns:toolkit="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
-             BackgroundColor="{StaticResource BackgroundColor}"
-             Title="Twoje subskrypcje">
-
-    <!-- Resources -->
-    <ContentPage.Resources>
-        <Style x:Key="CardStyle" TargetType="Border">
-            <Setter Property="StrokeShape" Value="RoundRectangle 16" />
-            <Setter Property="Stroke" Value="Transparent" />
-            <Setter Property="BackgroundColor" Value="White" />
-            <Setter Property="Padding" Value="16" />
-            <Setter Property="Margin" Value="16,8" />
-            <Setter Property="Shadow">
-                <Shadow Brush="#20000000" 
-                        Offset="0,4"
-                        Radius="8" />
-            </Setter>
-        </Style>
-
-        <Style x:Key="AvatarContainerStyle" TargetType="Border">
-            <Setter Property="StrokeShape" Value="RoundRectangle 50" />
-            <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
-            <Setter Property="Stroke" Value="Transparent" />
-            <Setter Property="WidthRequest" Value="70" />
-            <Setter Property="HeightRequest" Value="70" />
-            <Setter Property="HorizontalOptions" Value="Start" />
-        </Style>
-
-        <Style x:Key="TitleStyle" TargetType="Label">
-            <Setter Property="FontAttributes" Value="Bold" />
-            <Setter Property="FontSize" Value="18" />
-            <Setter Property="TextColor" Value="#333333" />
-            <Setter Property="Margin" Value="0,0,0,4" />
-        </Style>
-
-        <Style x:Key="DateStyle" TargetType="Label">
-            <Setter Property="FontSize" Value="13" />
-            <Setter Property="TextColor" Value="#666666" />
-            <Setter Property="Margin" Value="0,0,0,2" />
-        </Style>
-
-        <Style x:Key="PriceStyle" TargetType="Label">
-            <Setter Property="FontSize" Value="18" />
-            <Setter Property="FontAttributes" Value="Bold" />
-            <Setter Property="TextColor" Value="#2D5AF8" />
-        </Style>
-    </ContentPage.Resources>
-
-    <!-- Toolbar -->
-    <!--<ContentPage.ToolbarItems>
-        <ToolbarItem Text="Dodaj" Command="{Binding AddSubscriptionCommand}" IconImageSource="plus.png" />
-    </ContentPage.ToolbarItems>-->
+             xmlns:converters="clr-namespace:SubscriptionManager.UI.Converters"
+             BackgroundColor="{StaticResource BackgroundColor}">
 
     <!-- Page Behaviors -->
     <ContentPage.Behaviors>
@@ -65,6 +16,11 @@
 
     <!-- Main Content -->
     <Grid RowDefinitions="Auto,*" Padding="0,12,0,0">
+        <!-- Header (optional) -->
+        <Label Text="Twoje subskrypcje" 
+               Style="{StaticResource HeaderStyle}"
+               Margin="20,0,0,12"
+               Grid.Row="0" />
 
         <!-- Subscription List -->
         <CollectionView ItemsSource="{Binding Subscriptions}"
@@ -83,15 +39,13 @@
             </CollectionView.ItemsLayout>
 
             <CollectionView.EmptyView>
-                <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Padding="24">
                     <Image Source="empty_state.png" HeightRequest="150" Opacity="0.6" Margin="0,0,0,20" />
                     <Label Text="Brak aktywnych subskrypcji" 
-                           FontSize="18" 
-                           TextColor="#666666"
+                           Style="{StaticResource SubheaderStyle}"
                            HorizontalTextAlignment="Center" />
-                    <Label Text="Dodaj swoją pierwszą subskrypcję klikając przycisk 'Dodaj'" 
-                           FontSize="14" 
-                           TextColor="#999999"
+                    <Label Text="Dodaj swoją pierwszą subskrypcję klikając przycisk '+'" 
+                           Style="{StaticResource HintStyle}"
                            HorizontalTextAlignment="Center"
                            Margin="40,8,40,0" />
                 </StackLayout>
@@ -118,7 +72,7 @@
                                     <Label Text="Od:" 
                                            Grid.Row="0" 
                                            Grid.Column="0"
-                                           TextColor="#999999"
+                                           TextColor="{StaticResource TextTertiary}"
                                            FontSize="13" />
                                     <Label Text="{Binding DateFrom, StringFormat='{0:dd MMM yyyy}'}" 
                                            Grid.Row="0" 
@@ -129,7 +83,7 @@
                                     <Label Text="Do:" 
                                            Grid.Row="1" 
                                            Grid.Column="0"
-                                           TextColor="#999999"
+                                           TextColor="{StaticResource TextTertiary}"
                                            FontSize="13" />
                                     <Label Text="{Binding DateTo, StringFormat='{0:dd MMM yyyy}'}" 
                                            Grid.Row="1" 
@@ -143,14 +97,13 @@
                                 <Label Text="{Binding Price, StringFormat='{0} zł'}" 
                                        Style="{StaticResource PriceStyle}" />
 
-                                <!-- Status Indicator (optional) -->
-                                <Border BackgroundColor="#E6F4EA" 
-                                        StrokeShape="RoundRectangle 12"
-                                        Padding="8,4"
+                                <!-- Status Indicator -->
+                                <Border Style="{StaticResource StatusBadgeStyle}"
+                                        BackgroundColor="{StaticResource SuccessLight}" 
                                         HorizontalOptions="End"
                                         Margin="0,4,0,0">
                                     <Label Text="Aktywna" 
-                                           TextColor="#34A853"
+                                           TextColor="{StaticResource Success}"
                                            FontSize="11"
                                            FontAttributes="Bold" />
                                 </Border>
@@ -163,16 +116,7 @@
 
         <!-- Floating Action Button -->
         <Button Text="+"
-                FontSize="24"
-                FontAttributes="Bold"
-                TextColor="White"
-                BackgroundColor="#2D5AF8"
-                WidthRequest="56"
-                HeightRequest="56"
-                CornerRadius="28"
-                HorizontalOptions="End"
-                VerticalOptions="End"
-                Margin="0,0,24,24"
+                Style="{StaticResource FloatingActionButtonStyle}"
                 Command="{Binding AddSubscriptionCommand}"
                 Grid.Row="1" />
     </Grid>
