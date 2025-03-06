@@ -11,7 +11,6 @@ public class AvatarService : IAvatarService
             "logo_netflix.png",
             "logo_prime.png",
             "logo_xbox.png",
-            "dotnet_bot.png",
             "logo_upload.png"};
     }
 }

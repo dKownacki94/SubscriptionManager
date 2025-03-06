@@ -14,7 +14,6 @@
         <Setter Property="Stroke" Value="Transparent" />
         <Setter Property="BackgroundColor" Value="{StaticResource CardBackgroundColor}" />
         <Setter Property="Padding" Value="20" />
-        <Setter Property="Margin" Value="4" />
         <Setter Property="Shadow" Value="{StaticResource MediumShadow}" />
     </Style>
 

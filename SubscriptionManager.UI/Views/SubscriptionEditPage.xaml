@@ -48,8 +48,8 @@
                                            Shadow="{StaticResource MediumShadow}">
                                         <Image Source="{Binding .}" 
                                                Aspect="AspectFit" 
-                                               HeightRequest="90" 
-                                               WidthRequest="90"
+                                               HeightRequest="80" 
+                                               WidthRequest="80"
                                                Margin="5">
                                             <Image.GestureRecognizers>
                                                 <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SubscriptionEditViewModel}}, Path=AvatarTappedCommand}" />
@@ -98,7 +98,7 @@
                     <Grid ColumnDefinitions="*, *" ColumnSpacing="16">
                         <!-- Start Date Field -->
                         <VerticalStackLayout Grid.Column="0">
-                            <Label Text="Data rozpoczęcia" 
+                            <Label Text="Data  rozpoczęcia" 
                                    Style="{StaticResource FieldLabelStyle}"/>
 
                             <Border Style="{StaticResource InputContainerStyle}">

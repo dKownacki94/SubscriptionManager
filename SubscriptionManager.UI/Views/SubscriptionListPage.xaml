@@ -53,7 +53,7 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Border Style="{StaticResource CardStyle}">
+                    <Border Style="{StaticResource CardStyle}" Margin="16,8,16,8">
                         <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="16">
                             <!-- Avatar -->
                             <Border Style="{StaticResource AvatarContainerStyle}" Grid.Column="0">
