@@ -6,7 +6,7 @@
              xmlns:toolkit="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
              xmlns:cards="clr-namespace:PanCardView;assembly=PanCardView"
              xmlns:controls="clr-namespace:PanCardView.Controls;assembly=PanCardView"
-             Title="Dodaj/edytuj subskrypcje"
+             Title="{Binding PageTitle}"
              BackgroundColor="{StaticResource BackgroundColor}">
 
     <!-- Page Resources -->
@@ -89,11 +89,6 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="16">
-            <Label Text="Edycja subskrypcji" 
-                   FontSize="24" 
-                   FontAttributes="Bold" 
-                   TextColor="{StaticResource TextPrimaryColor}" 
-                   Margin="4,0,0,8"/>
 
             <!-- Avatar Selection Section -->
             <Border Style="{StaticResource CardStyle}">
