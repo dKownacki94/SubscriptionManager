@@ -7,151 +7,243 @@
              xmlns:cards="clr-namespace:PanCardView;assembly=PanCardView"
              xmlns:controls="clr-namespace:PanCardView.Controls;assembly=PanCardView"
              Title="Dodaj/edytuj subskrypcje"
-             BackgroundColor="#F4F4F4">
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <!-- Page Resources -->
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <!-- Shadows -->
+            <Shadow x:Key="CardShadow"
+                    Brush="#20000000"
+                    Opacity="1"
+                    Radius="8"
+                    Offset="0,4"/>
+
+            <!-- Colors -->
+            <Color x:Key="PrimaryColor">#2D5AF8</Color>
+            <Color x:Key="SecondaryColor">#F8F9FA</Color>
+            <Color x:Key="TextPrimaryColor">#333333</Color>
+            <Color x:Key="TextSecondaryColor">#666666</Color>
+            <Color x:Key="DangerColor">#DC3545</Color>
+            <Color x:Key="SuccessColor">#34A853</Color>
+
+            <!-- Styles -->
+            <Style x:Key="CardStyle" TargetType="Border">
+                <Setter Property="StrokeShape" Value="RoundRectangle 16" />
+                <Setter Property="Stroke" Value="Transparent" />
+                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="Padding" Value="20" />
+                <Setter Property="Margin" Value="0,8" />
+                <Setter Property="Shadow" Value="{StaticResource CardShadow}" />
+            </Style>
+
+            <Style x:Key="HeaderStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
+                <Setter Property="Margin" Value="0,0,0,16" />
+            </Style>
+
+            <Style x:Key="FieldLabelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="TextColor" Value="{StaticResource TextSecondaryColor}" />
+                <Setter Property="Margin" Value="4,0,0,8" />
+            </Style>
+
+            <Style x:Key="InputStyle" TargetType="InputView">
+                <Setter Property="BackgroundColor" Value="{StaticResource SecondaryColor}" />
+                <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
+            </Style>
+
+            <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="HeightRequest" Value="50" />
+            </Style>
+
+            <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource SecondaryColor}" />
+                <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="HeightRequest" Value="50" />
+                <Setter Property="BorderWidth" Value="1" />
+                <Setter Property="BorderColor" Value="#E0E0E0" />
+            </Style>
+
+            <Style x:Key="DangerButtonStyle" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource DangerColor}" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="HeightRequest" Value="50" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ContentPage.Behaviors>
         <toolkit:EventToCommandBehavior EventName="Appearing" Command="{Binding AppearingCommand}"/>
     </ContentPage.Behaviors>
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="20">
+        <VerticalStackLayout Padding="20" Spacing="16">
+            <Label Text="Edycja subskrypcji" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="{StaticResource TextPrimaryColor}" 
+                   Margin="4,0,0,8"/>
+
             <!-- Avatar Selection Section -->
-            <Frame BackgroundColor="White" 
-                   BorderColor="#E0E0E0" 
-                   CornerRadius="10" 
-                   Padding="15">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Wybierz avatar:" 
-                           FontSize="Medium" 
-                           FontAttributes="Bold" 
-                           TextColor="#333333" 
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Wybierz avatar" 
+                           Style="{StaticResource HeaderStyle}"
                            HorizontalOptions="Center"/>
 
                     <cards:CarouselView x:Name="AvatarCarousel" 
                                         ItemsSource="{Binding Avatars}" 
                                         SelectedItem="{Binding AvatarPath, Mode=TwoWay}" 
-                                        HeightRequest="120" 
+                                        HeightRequest="130" 
                                         WidthRequest="350" 
                                         HorizontalOptions="Center" 
                                         IsCyclical="True">
                         <cards:CarouselView.ItemTemplate>
                             <DataTemplate>
                                 <Grid Padding="10">
-                                    <Frame HeightRequest="100" 
+                                    <Border StrokeShape="RoundRectangle 50"
+                                           HeightRequest="100" 
                                            WidthRequest="100" 
-                                           CornerRadius="50" 
                                            HorizontalOptions="Center" 
-                                           VerticalOptions="Center" 
-                                           Padding="0" 
-                                           IsClippedToBounds="True" 
-                                           BorderColor="#CCCCCC" 
-                                           Shadow="{StaticResource DefaultShadow}">
+                                           VerticalOptions="Center"
+                                           BackgroundColor="White"
+                                           Stroke="#E0E0E0"
+                                           StrokeThickness="1"
+                                           Shadow="{StaticResource CardShadow}">
                                         <Image Source="{Binding .}" 
                                                Aspect="AspectFit" 
                                                HeightRequest="90" 
-                                               WidthRequest="90">
+                                               WidthRequest="90"
+                                               Margin="5">
                                             <Image.GestureRecognizers>
                                                 <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SubscriptionEditViewModel}}, Path=AvatarTappedCommand}" />
                                             </Image.GestureRecognizers>
                                         </Image>
-                                    </Frame>
+                                    </Border>
                                 </Grid>
                             </DataTemplate>
                         </cards:CarouselView.ItemTemplate>
                     </cards:CarouselView>
+
+                    <Label Text="Przeciągnij w lewo lub prawo, aby wybrać avatar" 
+                           FontSize="13" 
+                           TextColor="{StaticResource TextSecondaryColor}" 
+                           HorizontalOptions="Center"/>
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
 
             <!-- Form Fields Section -->
-            <Frame BackgroundColor="White" 
-                   BorderColor="#E0E0E0" 
-                   CornerRadius="10" 
-                   Padding="15">
-                <VerticalStackLayout Spacing="15">
+            <Border Style="{StaticResource CardStyle}">
+                <VerticalStackLayout Spacing="20">
                     <!-- Name Field -->
                     <VerticalStackLayout>
-                        <Label Text="Nazwa:" 
-                               FontSize="Medium" 
-                               TextColor="#333333" 
-                               Margin="0,0,0,5"/>
-                        <Entry Text="{Binding Name}" 
-                               Placeholder="Nazwa subskrypcji" 
-                               BackgroundColor="#F9F9F9" 
-                               HeightRequest="50"/>
+                        <Label Text="Nazwa subskrypcji" 
+                               Style="{StaticResource FieldLabelStyle}"/>
+
+                        <Border StrokeShape="RoundRectangle 8"
+                                Stroke="#E0E0E0"
+                                StrokeThickness="1"
+                                BackgroundColor="{StaticResource SecondaryColor}">
+                            <Entry Text="{Binding Name}" 
+                                   Placeholder="Wpisz nazwę usługi" 
+                                   Style="{StaticResource InputStyle}"
+                                   Margin="12,0"
+                                   HeightRequest="50"/>
+                        </Border>
                     </VerticalStackLayout>
 
                     <!-- Price Field -->
                     <VerticalStackLayout>
-                        <Label Text="Cena (zł/miesiąc):" 
-                               FontSize="Medium" 
-                               TextColor="#333333" 
-                               Margin="0,0,0,5"/>
-                        <Entry Text="{Binding Price}" 
-                               Keyboard="Numeric" 
-                               Placeholder="0.00" 
-                               BackgroundColor="#F9F9F9" 
-                               HeightRequest="50"/>
+                        <Label Text="Cena (zł/miesiąc)" 
+                               Style="{StaticResource FieldLabelStyle}"/>
+
+                        <Border StrokeShape="RoundRectangle 8"
+                                Stroke="#E0E0E0"
+                                StrokeThickness="1"
+                                BackgroundColor="{StaticResource SecondaryColor}">
+                            <Entry Text="{Binding Price}" 
+                                   Keyboard="Numeric" 
+                                   Placeholder="0.00" 
+                                   Style="{StaticResource InputStyle}"
+                                   Margin="12,0"
+                                   HeightRequest="50"/>
+                        </Border>
                     </VerticalStackLayout>
 
-                    <!-- Start Date Field -->
-                    <VerticalStackLayout>
-                        <Label Text="Data rozpoczęcia:" 
-                               FontSize="Medium" 
-                               TextColor="#333333" 
-                               Margin="0,0,0,5"/>
-                        <DatePicker Date="{Binding StartDate}" 
-                                    BackgroundColor="#F9F9F9" 
-                                    TextColor="#333333"/>
-                    </VerticalStackLayout>
+                    <!-- Date Fields -->
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="16">
+                        <!-- Start Date Field -->
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="Data rozpoczęcia" 
+                                   Style="{StaticResource FieldLabelStyle}"/>
 
-                    <!-- End Date Field -->
-                    <VerticalStackLayout>
-                        <Label Text="Data zakończenia:" 
-                               FontSize="Medium" 
-                               TextColor="#333333" 
-                               Margin="0,0,0,5"/>
-                        <DatePicker Date="{Binding EndDate}" 
-                                    BackgroundColor="#F9F9F9" 
-                                    TextColor="#333333"/>
-                    </VerticalStackLayout>
+                            <Border StrokeShape="RoundRectangle 8"
+                                    Stroke="#E0E0E0"
+                                    StrokeThickness="1"
+                                    BackgroundColor="{StaticResource SecondaryColor}"
+                                    HeightRequest="50"
+                                    Padding="12,0">
+                                <DatePicker Date="{Binding StartDate}" 
+                                            TextColor="{StaticResource TextPrimaryColor}"
+                                            FontSize="16"
+                                            VerticalOptions="Center"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- End Date Field -->
+                        <VerticalStackLayout Grid.Column="1">
+                            <Label Text="Data zakończenia" 
+                                   Style="{StaticResource FieldLabelStyle}"/>
+
+                            <Border StrokeShape="RoundRectangle 8"
+                                    Stroke="#E0E0E0"
+                                    StrokeThickness="1"
+                                    BackgroundColor="{StaticResource SecondaryColor}"
+                                    HeightRequest="50"
+                                    Padding="12,0">
+                                <DatePicker Date="{Binding EndDate}" 
+                                            TextColor="{StaticResource TextPrimaryColor}"
+                                            FontSize="16"
+                                            VerticalOptions="Center"/>
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
                 </VerticalStackLayout>
-            </Frame>
+            </Border>
 
             <!-- Action Buttons Section -->
-            <Grid ColumnDefinitions="*, *, *" 
-                  ColumnSpacing="10" 
-                  Margin="0,20,0,0">
+            <Grid ColumnDefinitions="*, *" 
+                  ColumnSpacing="16" 
+                  Margin="0,16,0,0">
+
                 <Button Text="Anuluj" 
                         Command="{Binding CancelCommand}" 
                         Grid.Column="0" 
-                        BackgroundColor="#F0F0F0" 
-                        TextColor="#333333" 
-                        BorderColor="#CCCCCC" 
-                        BorderWidth="1"/>
-
-                <Button Text="Usuń" 
-                        Command="{Binding DeleteCommand}" 
-                        IsVisible="{Binding SubscriptionId, Converter={StaticResource GuidIsNotEmptyConverter}}" 
-                        Grid.Column="1" 
-                        BackgroundColor="#FF6B6B" 
-                        TextColor="White"/>
+                        Style="{StaticResource SecondaryButtonStyle}"/>
 
                 <Button Text="Zapisz" 
                         Command="{Binding SaveCommand}" 
-                        Grid.Column="2" 
-                        BackgroundColor="#4CAF50" 
-                        TextColor="White"/>
+                        Grid.Column="1" 
+                        Style="{StaticResource PrimaryButtonStyle}"/>
             </Grid>
+
+            <!-- Delete Button (Only visible when editing) -->
+            <Button Text="Usuń subskrypcję" 
+                    Command="{Binding DeleteCommand}" 
+                    IsVisible="{Binding SubscriptionId, Converter={StaticResource GuidIsNotEmptyConverter}}" 
+                    Style="{StaticResource DangerButtonStyle}"
+                    Margin="0,12,0,0"/>
         </VerticalStackLayout>
     </ScrollView>
-
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Shadow x:Key="DefaultShadow"
-                    Brush="Black"
-                    Opacity="0.2"
-                    Radius="10"
-                    Offset="5,5"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
 </ContentPage>
