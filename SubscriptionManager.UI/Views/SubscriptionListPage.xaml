@@ -99,11 +99,11 @@
 
                                 <!-- Status Indicator -->
                                 <Border Style="{StaticResource StatusBadgeStyle}"
-                                        BackgroundColor="{StaticResource SuccessLight}" 
+                                        BackgroundColor="{Binding Status, Converter={StaticResource SubscriptionStatusBackgroundConverter}}" 
                                         HorizontalOptions="End"
                                         Margin="0,4,0,0">
-                                    <Label Text="Aktywna" 
-                                           TextColor="{StaticResource Success}"
+                                    <Label Text="{Binding Status, Converter={StaticResource SubscriptionStatusConverter}}" 
+                                           TextColor="{Binding Status, Converter={StaticResource SubscriptionStatusColorConverter}}"
                                            FontSize="11"
                                            FontAttributes="Bold" />
                                 </Border>

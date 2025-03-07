@@ -9,6 +9,9 @@
             <converters:AvatarConverter x:Key="AvatarConverter" />
             <converters:SelectionChangedEventArgsConverter x:Key="SelectionChangedEventArgsConverter" />
             <converters:GuidIsNotEmptyConverter x:Key="GuidIsNotEmptyConverter"/>
+            <converters:SubscriptionStatusConverter x:Key="SubscriptionStatusConverter"/>
+            <converters:SubscriptionStatusColorConverter x:Key="SubscriptionStatusColorConverter"/>
+            <converters:SubscriptionStatusBackgroundConverter x:Key="SubscriptionStatusBackgroundConverter"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />

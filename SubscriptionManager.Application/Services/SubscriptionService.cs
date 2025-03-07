@@ -17,6 +17,8 @@ public class SubscriptionService : ISubscriptionService
     public async Task<IEnumerable<SubscriptionDto>> GetAllSubscriptionsAsync()
     {
         var subscriptions = await _subscriptionRepository.GetAllAsync();
+        var currentDate = DateTime.Today;
+
         return subscriptions.Select(s => new SubscriptionDto
         {
             Id = s.Id,
@@ -24,7 +26,8 @@ public class SubscriptionService : ISubscriptionService
             DateFrom = s.DateFrom,
             DateTo = s.DateTo,
             Price = s.Price,
-            AvatarPath = s.AvatarPath
+            AvatarPath = s.AvatarPath,
+            Status = MapDomainStatusToDto(s.GetStatus(currentDate))
         });
     }
 
@@ -34,6 +37,8 @@ public class SubscriptionService : ISubscriptionService
         if (subscription == null)
             return null;
 
+        var currentDate = DateTime.Today;
+
         return new SubscriptionDto
         {
             Id = subscription.Id,
@@ -41,7 +46,8 @@ public class SubscriptionService : ISubscriptionService
             DateFrom = subscription.DateFrom,
             DateTo = subscription.DateTo,
             Price = subscription.Price,
-            AvatarPath = subscription.AvatarPath
+            AvatarPath = subscription.AvatarPath,
+            Status = MapDomainStatusToDto(subscription.GetStatus(currentDate))
         };
     }
 
@@ -74,8 +80,20 @@ public class SubscriptionService : ISubscriptionService
 
         await _subscriptionRepository.UpdateAsync(subscription);
     }
+
     public async Task DeleteSubscriptionAsync(Guid id)
     {
         await _subscriptionRepository.DeleteAsync(id);
+    }
+
+    private SubscriptionStatusDto MapDomainStatusToDto(SubscriptionStatus domainStatus)
+    {
+        return domainStatus switch
+        {
+            SubscriptionStatus.Active => SubscriptionStatusDto.Active,
+            SubscriptionStatus.Expiring => SubscriptionStatusDto.Expiring,
+            SubscriptionStatus.Inactive => SubscriptionStatusDto.Inactive,
+            _ => SubscriptionStatusDto.Inactive
+        };
     }
 }
