@@ -5,9 +5,9 @@ namespace SubscriptionManager.Infrastructure.Mappers;
 
 public static class SubscriptionMapper
 {
-    public static SubscriptionDto ToDto(Subscription domainModel)
+    public static SubscriptionEntity ToEntity(Subscription domainModel)
     {
-        return new SubscriptionDto
+        return new SubscriptionEntity
         {
             Id = domainModel.Id,
             Name = domainModel.Name,
@@ -18,18 +18,18 @@ public static class SubscriptionMapper
         };
     }
 
-    public static Subscription ToDomain(SubscriptionDto dto)
+    public static Subscription ToDomain(SubscriptionEntity entity)
     {
         var subscription = new Subscription(
-            dto.Name,
-            dto.DateFrom,
-            dto.DateTo,
-            dto.Price,
-            dto.AvatarPath);
+            entity.Name,
+            entity.DateFrom,
+            entity.DateTo,
+            entity.Price,
+            entity.AvatarPath);
 
         typeof(Subscription)
             .GetProperty("Id")
-            .SetValue(subscription, dto.Id);
+            .SetValue(subscription, entity.Id);
 
         return subscription;
     }

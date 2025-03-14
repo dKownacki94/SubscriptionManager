@@ -5,7 +5,7 @@ namespace SubscriptionManager.Infrastructure.Data;
 
 public class SubscriptionDbContext : DbContext
 {
-    public DbSet<SubscriptionDto> Subscriptions { get; set; }
+    public DbSet<SubscriptionEntity> Subscriptions { get; set; }
 
     public SubscriptionDbContext(DbContextOptions<SubscriptionDbContext> options)
         : base(options)
@@ -14,7 +14,7 @@ public class SubscriptionDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<SubscriptionDto>(entity =>
+        modelBuilder.Entity<SubscriptionEntity>(entity =>
         {
             entity.ToTable("Subscriptions");
             entity.HasKey(e => e.Id);

@@ -1,6 +1,6 @@
 ﻿namespace SubscriptionManager.Infrastructure.DataModels;
 
-public class SubscriptionDto
+public class SubscriptionEntity
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

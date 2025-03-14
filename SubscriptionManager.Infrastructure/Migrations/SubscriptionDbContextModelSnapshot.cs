@@ -17,7 +17,7 @@ namespace SubscriptionManager.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.14");
 
-            modelBuilder.Entity("SubscriptionManager.Infrastructure.DataModels.SubscriptionDto", b =>
+            modelBuilder.Entity("SubscriptionManager.Infrastructure.DataModels.SubscriptionEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

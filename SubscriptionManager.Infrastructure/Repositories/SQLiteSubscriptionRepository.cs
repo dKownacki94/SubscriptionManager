@@ -17,43 +17,43 @@ public class SQLiteSubscriptionRepository : ISubscriptionRepository
 
     public async Task<IEnumerable<Subscription>> GetAllAsync()
     {
-        var dtos = await _dbContext.Subscriptions.ToListAsync();
-        return dtos.Select(SubscriptionMapper.ToDomain);
+        var entities = await _dbContext.Subscriptions.ToListAsync();
+        return entities.Select(SubscriptionMapper.ToDomain);
     }
 
     public async Task<Subscription> GetByIdAsync(Guid id)
     {
-        var dto = await _dbContext.Subscriptions.FindAsync(id);
-        return dto != null ? SubscriptionMapper.ToDomain(dto) : null;
+        var entity = await _dbContext.Subscriptions.FindAsync(id);
+        return entity != null ? SubscriptionMapper.ToDomain(entity) : null;
     }
 
     public async Task AddAsync(Subscription subscription)
     {
-        var dto = SubscriptionMapper.ToDto(subscription);
-        await _dbContext.Subscriptions.AddAsync(dto);
+        var entity = SubscriptionMapper.ToEntity(subscription);
+        await _dbContext.Subscriptions.AddAsync(entity);
         await _dbContext.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(Subscription subscription)
     {
-        var dto = SubscriptionMapper.ToDto(subscription);
+        var entity = SubscriptionMapper.ToEntity(subscription);
 
-        var existingDto = await _dbContext.Subscriptions.FindAsync(dto.Id);
-        if (existingDto == null)
+        var existingEntity = await _dbContext.Subscriptions.FindAsync(entity.Id);
+        if (existingEntity == null)
         {
-            throw new KeyNotFoundException($"Subskrypcja o identyfikatorze {dto.Id} nie została znaleziona.");
+            throw new KeyNotFoundException($"Subskrypcja o identyfikatorze {entity.Id} nie została znaleziona.");
         }
 
-        _dbContext.Entry(existingDto).CurrentValues.SetValues(dto);
+        _dbContext.Entry(existingEntity).CurrentValues.SetValues(entity);
         await _dbContext.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        var dto = await _dbContext.Subscriptions.FindAsync(id);
-        if (dto != null)
+        var entity = await _dbContext.Subscriptions.FindAsync(id);
+        if (entity != null)
         {
-            _dbContext.Subscriptions.Remove(dto);
+            _dbContext.Subscriptions.Remove(entity);
             await _dbContext.SaveChangesAsync();
         }
         else
