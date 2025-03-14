@@ -4,10 +4,13 @@ using PanCardView;
 using SubscriptionManager.Application.Interfaces;
 using SubscriptionManager.Application.Services;
 using SubscriptionManager.Domain.Interfaces;
+using SubscriptionManager.Infrastructure.Data;
 using SubscriptionManager.Infrastructure.Repositories;
 using SubscriptionManager.Infrastructure.Services;
+using SubscriptionManager.UI.Services;
 using SubscriptionManager.UI.ViewModels;
 using SubscriptionManager.UI.Views;
+using Microsoft.EntityFrameworkCore;
 
 namespace SubscriptionManager.UI;
 
@@ -26,7 +29,17 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        builder.Services.AddScoped<ISubscriptionRepository, InMemorySubscriptionRepository>();
+        builder.Services.AddSingleton<IFileSystemService, FileSystemService>();
+        builder.Services.AddSingleton<IDbPathProvider, DbPathProvider>();
+
+        builder.Services.AddDbContext<SubscriptionDbContext>((services, options) =>
+        {
+            var dbPath = services.GetRequiredService<IDbPathProvider>().GetDbPath();
+            options.UseSqlite($"Data Source={dbPath}");
+        }, ServiceLifetime.Scoped);
+
+        builder.Services.AddScoped<ISubscriptionRepository, SQLiteSubscriptionRepository>();
+
         builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
         builder.Services.AddSingleton<IAvatarService, AvatarService>();
 
