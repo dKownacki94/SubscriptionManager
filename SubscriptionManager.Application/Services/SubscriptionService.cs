@@ -1,4 +1,5 @@
-﻿using SubscriptionManager.Application.DTOs;
+﻿using AutoMapper;
+using SubscriptionManager.Application.DTOs;
 using SubscriptionManager.Application.Interfaces;
 using SubscriptionManager.Domain.Entities;
 using SubscriptionManager.Domain.Interfaces;
@@ -8,92 +9,42 @@ namespace SubscriptionManager.Application.Services;
 public class SubscriptionService : ISubscriptionService
 {
     private readonly ISubscriptionRepository _subscriptionRepository;
+    private readonly IMapper _mapper;
 
-    public SubscriptionService(ISubscriptionRepository subscriptionRepository)
+    public SubscriptionService(
+        ISubscriptionRepository subscriptionRepository,
+        IMapper mapper)
     {
         _subscriptionRepository = subscriptionRepository;
+        _mapper = mapper;
     }
 
     public async Task<IEnumerable<SubscriptionDto>> GetAllSubscriptionsAsync()
     {
         var subscriptions = await _subscriptionRepository.GetAllAsync();
-        var currentDate = DateTime.Today;
-
-        return subscriptions.Select(s => new SubscriptionDto
-        {
-            Id = s.Id,
-            Name = s.Name,
-            DateFrom = s.DateFrom,
-            DateTo = s.DateTo,
-            Price = s.Price,
-            AvatarPath = s.AvatarPath,
-            Status = MapDomainStatusToDto(s.GetStatus(currentDate))
-        });
+        return _mapper.Map<IEnumerable<SubscriptionDto>>(subscriptions);
     }
 
     public async Task<SubscriptionDto> GetSubscriptionByIdAsync(Guid id)
     {
         var subscription = await _subscriptionRepository.GetByIdAsync(id);
-        if (subscription == null)
-            return null;
-
-        var currentDate = DateTime.Today;
-
-        return new SubscriptionDto
-        {
-            Id = subscription.Id,
-            Name = subscription.Name,
-            DateFrom = subscription.DateFrom,
-            DateTo = subscription.DateTo,
-            Price = subscription.Price,
-            AvatarPath = subscription.AvatarPath,
-            Status = MapDomainStatusToDto(subscription.GetStatus(currentDate))
-        };
+        return _mapper.Map<SubscriptionDto>(subscription);
     }
 
     public async Task AddSubscriptionAsync(SubscriptionDto subscriptionDto)
     {
-        var subscription = new Subscription(
-            subscriptionDto.Name,
-            subscriptionDto.DateFrom,
-            subscriptionDto.DateTo,
-            subscriptionDto.Price,
-            subscriptionDto.AvatarPath);
-
+        var subscription = _mapper.Map<Subscription>(subscriptionDto);
         await _subscriptionRepository.AddAsync(subscription);
     }
 
     public async Task UpdateSubscriptionAsync(SubscriptionDto subscriptionDto)
     {
-        var subscription = await _subscriptionRepository.GetByIdAsync(subscriptionDto.Id);
-        if (subscription == null)
-        {
-            throw new KeyNotFoundException($"Subskrypcja o identyfikatorze {subscriptionDto.Id} nie została znaleziona.");
-        }
-
-        subscription.UpdateSubscription(
-            subscriptionDto.Name,
-            subscriptionDto.DateFrom,
-            subscriptionDto.DateTo,
-            subscriptionDto.Price,
-            subscriptionDto.AvatarPath);
-
+        var subscription = _mapper.Map<Subscription>(subscriptionDto);
         await _subscriptionRepository.UpdateAsync(subscription);
     }
 
     public async Task DeleteSubscriptionAsync(Guid id)
     {
         await _subscriptionRepository.DeleteAsync(id);
-    }
-
-    private SubscriptionStatusDto MapDomainStatusToDto(SubscriptionStatus domainStatus)
-    {
-        return domainStatus switch
-        {
-            SubscriptionStatus.Active => SubscriptionStatusDto.Active,
-            SubscriptionStatus.Expiring => SubscriptionStatusDto.Expiring,
-            SubscriptionStatus.Inactive => SubscriptionStatusDto.Inactive,
-            _ => SubscriptionStatusDto.Inactive
-        };
     }
 }

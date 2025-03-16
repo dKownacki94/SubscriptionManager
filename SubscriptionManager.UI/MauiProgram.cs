@@ -2,9 +2,11 @@
 using Microsoft.Extensions.Logging;
 using PanCardView;
 using SubscriptionManager.Application.Interfaces;
+using SubscriptionManager.Application.Mapping;
 using SubscriptionManager.Application.Services;
 using SubscriptionManager.Domain.Interfaces;
 using SubscriptionManager.Infrastructure.Data;
+using SubscriptionManager.Infrastructure.Mapping;
 using SubscriptionManager.Infrastructure.Repositories;
 using SubscriptionManager.Infrastructure.Services;
 using SubscriptionManager.UI.Services;
@@ -42,6 +44,8 @@ public static class MauiProgram
 
         builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
         builder.Services.AddSingleton<IAvatarService, AvatarService>();
+
+        builder.Services.AddAutoMapper(typeof(ApplicationMappingProfile).Assembly, typeof(InfrastructureMappingProfile).Assembly);
 
         builder.Services.AddTransient<SubscriptionListPage>();
         builder.Services.AddTransient<SubscriptionListViewModel>();
