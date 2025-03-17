@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using SubscriptionManager.Application.Interfaces;
 using SubscriptionManager.Domain.Entities;
-using SubscriptionManager.Domain.Interfaces;
 using SubscriptionManager.Infrastructure.Data;
 using SubscriptionManager.Infrastructure.DataModels;
 

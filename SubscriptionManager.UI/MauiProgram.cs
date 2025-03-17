@@ -4,7 +4,6 @@ using PanCardView;
 using SubscriptionManager.Application.Interfaces;
 using SubscriptionManager.Application.Mapping;
 using SubscriptionManager.Application.Services;
-using SubscriptionManager.Domain.Interfaces;
 using SubscriptionManager.Infrastructure.Data;
 using SubscriptionManager.Infrastructure.Mapping;
 using SubscriptionManager.Infrastructure.Repositories;

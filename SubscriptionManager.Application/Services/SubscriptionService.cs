@@ -2,7 +2,6 @@
 using SubscriptionManager.Application.DTOs;
 using SubscriptionManager.Application.Interfaces;
 using SubscriptionManager.Domain.Entities;
-using SubscriptionManager.Domain.Interfaces;
 
 namespace SubscriptionManager.Application.Services;
 

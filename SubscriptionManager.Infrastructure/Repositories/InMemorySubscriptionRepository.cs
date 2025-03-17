@@ -1,5 +1,5 @@
-﻿using SubscriptionManager.Domain.Entities;
-using SubscriptionManager.Domain.Interfaces;
+﻿using SubscriptionManager.Application.Interfaces;
+using SubscriptionManager.Domain.Entities;
 
 namespace SubscriptionManager.Infrastructure.Repositories;
 
@@ -9,9 +9,6 @@ public class InMemorySubscriptionRepository : ISubscriptionRepository
 
     public Task<IEnumerable<Subscription>> GetAllAsync()
     {
-
-        //_subscriptions.Add(new Subscription("Prime Video", DateTime.Now, DateTime.Now.AddDays(1), 50, "dotnet_bot.png"));
-
         return Task.FromResult(_subscriptions.AsEnumerable());
     }
 
