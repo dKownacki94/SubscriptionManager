@@ -4,7 +4,7 @@ namespace SubscriptionManager.Domain.Entities;
 
 public class Subscription
 {
-    public Guid Id { get; private set; }
+    public Guid Id { get; protected set; }
     public string Name { get; private set; }
     public DateTime DateFrom { get; private set; }
     public DateTime DateTo { get; private set; }

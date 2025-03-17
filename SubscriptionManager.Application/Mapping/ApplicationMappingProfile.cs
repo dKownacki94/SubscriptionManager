@@ -20,15 +20,8 @@ public class ApplicationMappingProfile : Profile
                 src.DateTo,
                 src.Price,
                 src.AvatarPath))
-            .ForMember(dest => dest.Id, opt =>
-                opt.Condition(src => src.Id != Guid.Empty))
-            .AfterMap((src, dest) => {
-                if (src.Id != Guid.Empty)
-                {
-                    typeof(Subscription).GetProperty("Id")
-                        .SetValue(dest, src.Id);
-                }
-            });
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src =>
+                src.Id != Guid.Empty ? src.Id : Guid.NewGuid()));
     }
 
     private static SubscriptionStatusDto MapStatus(SubscriptionStatus status)

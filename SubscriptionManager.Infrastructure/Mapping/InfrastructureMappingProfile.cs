@@ -17,9 +17,6 @@ public class InfrastructureMappingProfile : Profile
                 src.DateTo,
                 src.Price,
                 src.AvatarPath))
-            .AfterMap((src, dest) => {
-                typeof(Subscription).GetProperty("Id")
-                    .SetValue(dest, src.Id);
-            });
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
     }
 }
