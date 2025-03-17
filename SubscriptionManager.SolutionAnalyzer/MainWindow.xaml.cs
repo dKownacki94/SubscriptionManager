@@ -29,7 +29,7 @@ public partial class MainWindow : Window
 
     private void LoadFileTree()
     {
-        string[] extensions = { ".cs" };
+        string[] extensions = { ".cs",".xaml" };
         var files = GetSolutionFiles(solutionPath, extensions);
         var rootNodes = BuildTree(files);
         FileTree.ItemsSource = rootNodes;
