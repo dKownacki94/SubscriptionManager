@@ -6,6 +6,7 @@
              xmlns:toolkit="clr-namespace:CommunityToolkit.Maui.Behaviors;assembly=CommunityToolkit.Maui"
              xmlns:cards="clr-namespace:PanCardView;assembly=PanCardView"
              xmlns:controls="clr-namespace:PanCardView.Controls;assembly=PanCardView"
+             xmlns:proc="clr-namespace:PanCardView.Processors;assembly=PanCardView"
              xmlns:converters="clr-namespace:SubscriptionManager.UI.Converters"
              Shell.NavBarIsVisible="False"
              BackgroundColor="{StaticResource BackgroundColor}">
@@ -27,39 +28,40 @@
                            Style="{StaticResource SubheaderStyle}"
                            HorizontalOptions="Center"/>
 
-                    <cards:CarouselView x:Name="AvatarCarousel" 
-                                        ItemsSource="{Binding Avatars}" 
-                                        SelectedItem="{Binding AvatarPath, Mode=TwoWay}" 
-                                        HeightRequest="130" 
-                                        WidthRequest="350" 
-                                        HorizontalOptions="Center" 
-                                        IsCyclical="True">
-                        <cards:CarouselView.ItemTemplate>
+                    <cards:CoverFlowView x:Name="AvatarCarousel" 
+                                      ItemsSource="{Binding Avatars}" 
+                                      SelectedItem="{Binding AvatarPath, Mode=TwoWay}" 
+                                      HeightRequest="160" 
+                                      PositionShiftValue="145"
+                                      IsCyclical="True">
+                        <x:Arguments>
+                            <proc:CoverFlowProcessor ScaleFactor="0.50" OpacityFactor="0.25" />
+                        </x:Arguments>
+
+                        <cards:CoverFlowView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Padding="10">
-                                    <Border StrokeShape="RoundRectangle 50"
+                                <Frame Margin="80"
+                                       Padding="0"
+                                       HasShadow="False"
+                                       IsClippedToBounds="True"
+                                       CornerRadius="50"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       BackgroundColor="{StaticResource SurfaceColor}"
+                                       BorderColor="{StaticResource Border}">
+                                    <Image Source="{Binding .}" 
+                                           Aspect="AspectFit" 
                                            HeightRequest="100" 
-                                           WidthRequest="100" 
-                                           HorizontalOptions="Center" 
-                                           VerticalOptions="Center"
-                                           BackgroundColor="{StaticResource SurfaceColor}"
-                                           Stroke="{StaticResource Border}"
-                                           StrokeThickness="1"
-                                           Shadow="{StaticResource MediumShadow}">
-                                        <Image Source="{Binding .}" 
-                                               Aspect="AspectFit" 
-                                               HeightRequest="80" 
-                                               WidthRequest="80"
-                                               Margin="5">
-                                            <Image.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SubscriptionEditViewModel}}, Path=AvatarTappedCommand}" />
-                                            </Image.GestureRecognizers>
-                                        </Image>
-                                    </Border>
-                                </Grid>
+                                           WidthRequest="100"
+                                           Margin="5">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:SubscriptionEditViewModel}}, Path=AvatarTappedCommand}" />
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                </Frame>
                             </DataTemplate>
-                        </cards:CarouselView.ItemTemplate>
-                    </cards:CarouselView>
+                        </cards:CoverFlowView.ItemTemplate>
+                    </cards:CoverFlowView>
 
                     <Label Text="Przeciągnij w lewo lub prawo, aby wybrać avatar" 
                            Style="{StaticResource HintStyle}"/>
