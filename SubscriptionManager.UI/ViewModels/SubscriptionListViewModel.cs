@@ -16,6 +16,11 @@ public partial class SubscriptionListViewModel : ObservableObject
     [ObservableProperty]
     public ObservableCollection<SubscriptionDto> subscriptions;
 
+    [ObservableProperty]
+    private bool _isScrolling = false;
+
+    private CancellationTokenSource? _scrollResetCts;
+
     public SubscriptionListViewModel(ISubscriptionService subscriptionService)
     {
         _subscriptionService = subscriptionService;
@@ -58,5 +63,28 @@ public partial class SubscriptionListViewModel : ObservableObject
             await Shell.Current.GoToAsync("edit", parameters);
             SelectedSubscription = null;
         }
+    }
+
+    [RelayCommand]
+    private void ScrollStarted()
+    {
+        IsScrolling = true;
+        ResetScrollTimer();
+    }
+
+    private void ResetScrollTimer()
+    {
+        _scrollResetCts?.Cancel();
+        _scrollResetCts = new CancellationTokenSource();
+
+        Task.Delay(300, _scrollResetCts.Token).ContinueWith(t =>
+        {
+            if (!t.IsCanceled)
+            {
+                MainThread.BeginInvokeOnMainThread(() => {
+                    IsScrolling = false;
+                });
+            }
+        });
     }
 }

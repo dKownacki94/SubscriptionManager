@@ -22,102 +22,125 @@
                Margin="20,0,0,12"
                Grid.Row="0" />
 
-        <!-- Subscription List -->
-        <CollectionView ItemsSource="{Binding Subscriptions}"
-                        SelectedItem="{Binding SelectedSubscription}"
-                        SelectionMode="Single"
-                        Grid.Row="1">
-            <CollectionView.Behaviors>
+        <!-- Subscription List wrapped in ScrollView to detect scrolling -->
+        <ScrollView Grid.Row="1" x:Name="subscriptionScrollView">
+            <ScrollView.Behaviors>
                 <toolkit:EventToCommandBehavior 
-                    EventName="SelectionChanged" 
-                    Command="{Binding SelectedSubscriptionChangedCommand}"
-                    EventArgsConverter="{StaticResource SelectionChangedEventArgsConverter}" />
-            </CollectionView.Behaviors>
+                    EventName="Scrolled" 
+                    Command="{Binding ScrollStartedCommand}" />
+            </ScrollView.Behaviors>
 
-            <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Vertical" ItemSpacing="0"/>
-            </CollectionView.ItemsLayout>
+            <CollectionView ItemsSource="{Binding Subscriptions}"
+                          SelectedItem="{Binding SelectedSubscription}"
+                          SelectionMode="Single">
+                <CollectionView.Behaviors>
+                    <toolkit:EventToCommandBehavior 
+                        EventName="SelectionChanged" 
+                        Command="{Binding SelectedSubscriptionChangedCommand}"
+                        EventArgsConverter="{StaticResource SelectionChangedEventArgsConverter}" />
+                </CollectionView.Behaviors>
 
-            <CollectionView.EmptyView>
-                <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Padding="24">
-                    <Image Source="empty_state.png" HeightRequest="150" Opacity="0.6" Margin="0,0,0,20" />
-                    <Label Text="Brak aktywnych subskrypcji" 
-                           Style="{StaticResource SubheaderStyle}"
-                           HorizontalTextAlignment="Center" />
-                    <Label Text="Dodaj swoją pierwszą subskrypcję klikając przycisk '+'" 
-                           Style="{StaticResource HintStyle}"
-                           HorizontalTextAlignment="Center"
-                           Margin="40,8,40,0" />
-                </StackLayout>
-            </CollectionView.EmptyView>
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="0"/>
+                </CollectionView.ItemsLayout>
 
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Border Style="{StaticResource CardStyle}" Margin="16,8,16,8">
-                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="16">
-                            <!-- Avatar -->
-                            <Border Style="{StaticResource AvatarContainerStyle}" Grid.Column="0">
-                                <Image Source="{Binding AvatarPath, Converter={StaticResource AvatarConverter}}"
-                                       WidthRequest="60"
-                                       HeightRequest="60"
-                                       Aspect="AspectFit" />
-                            </Border>
+                <CollectionView.EmptyView>
+                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Padding="24">
+                        <Image Source="empty_state.png" HeightRequest="150" Opacity="0.6" Margin="0,0,0,20" />
+                        <Label Text="Brak aktywnych subskrypcji" 
+                             Style="{StaticResource SubheaderStyle}"
+                             HorizontalTextAlignment="Center" />
+                        <Label Text="Dodaj swoją pierwszą subskrypcję klikając przycisk '+'" 
+                             Style="{StaticResource HintStyle}"
+                             HorizontalTextAlignment="Center"
+                             Margin="40,8,40,0" />
+                    </StackLayout>
+                </CollectionView.EmptyView>
 
-                            <!-- Subscription Details -->
-                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
-                                <Label Text="{Binding Name}" Style="{StaticResource TitleStyle}" />
-
-                                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" ColumnSpacing="6">
-                                    <!-- From Date -->
-                                    <Label Text="Od:" 
-                                           Grid.Row="0" 
-                                           Grid.Column="0"
-                                           TextColor="{StaticResource TextTertiary}"
-                                           FontSize="13" />
-                                    <Label Text="{Binding DateFrom, StringFormat='{0:dd MMM yyyy}'}" 
-                                           Grid.Row="0" 
-                                           Grid.Column="1"
-                                           Style="{StaticResource DateStyle}" />
-
-                                    <!-- To Date -->
-                                    <Label Text="Do:" 
-                                           Grid.Row="1" 
-                                           Grid.Column="0"
-                                           TextColor="{StaticResource TextTertiary}"
-                                           FontSize="13" />
-                                    <Label Text="{Binding DateTo, StringFormat='{0:dd MMM yyyy}'}" 
-                                           Grid.Row="1" 
-                                           Grid.Column="1"
-                                           Style="{StaticResource DateStyle}" />
-                                </Grid>
-                            </VerticalStackLayout>
-
-                            <!-- Price -->
-                            <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End">
-                                <Label Text="{Binding Price, StringFormat='{0} zł'}" 
-                                       Style="{StaticResource PriceStyle}" />
-
-                                <!-- Status Indicator -->
-                                <Border Style="{StaticResource StatusBadgeStyle}"
-                                        BackgroundColor="{Binding Status, Converter={StaticResource SubscriptionStatusBackgroundConverter}}" 
-                                        HorizontalOptions="End"
-                                        Margin="0,4,0,0">
-                                    <Label Text="{Binding Status, Converter={StaticResource SubscriptionStatusConverter}}" 
-                                           TextColor="{Binding Status, Converter={StaticResource SubscriptionStatusColorConverter}}"
-                                           FontSize="11"
-                                           FontAttributes="Bold" />
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource CardStyle}" Margin="16,8,16,8">
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="16">
+                                <!-- Avatar -->
+                                <Border Style="{StaticResource AvatarContainerStyle}" Grid.Column="0">
+                                    <Image Source="{Binding AvatarPath, Converter={StaticResource AvatarConverter}}"
+                                         WidthRequest="60"
+                                         HeightRequest="60"
+                                         Aspect="AspectFit" />
                                 </Border>
-                            </VerticalStackLayout>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
 
-        <!-- Floating Action Button -->
+                                <!-- Subscription Details -->
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                                    <Label Text="{Binding Name}" Style="{StaticResource TitleStyle}" />
+
+                                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" ColumnSpacing="6">
+                                        <!-- From Date -->
+                                        <Label Text="Od:" 
+                                             Grid.Row="0" 
+                                             Grid.Column="0"
+                                             TextColor="{StaticResource TextTertiary}"
+                                             FontSize="13" />
+                                        <Label Text="{Binding DateFrom, StringFormat='{0:dd MMM yyyy}'}" 
+                                             Grid.Row="0" 
+                                             Grid.Column="1"
+                                             Style="{StaticResource DateStyle}" />
+
+                                        <!-- To Date -->
+                                        <Label Text="Do:" 
+                                             Grid.Row="1" 
+                                             Grid.Column="0"
+                                             TextColor="{StaticResource TextTertiary}"
+                                             FontSize="13" />
+                                        <Label Text="{Binding DateTo, StringFormat='{0:dd MMM yyyy}'}" 
+                                             Grid.Row="1" 
+                                             Grid.Column="1"
+                                             Style="{StaticResource DateStyle}" />
+                                    </Grid>
+                                </VerticalStackLayout>
+
+                                <!-- Price -->
+                                <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" HorizontalOptions="End">
+                                    <Label Text="{Binding Price, StringFormat='{0} zł'}" 
+                                         Style="{StaticResource PriceStyle}" />
+
+                                    <!-- Status Indicator -->
+                                    <Border Style="{StaticResource StatusBadgeStyle}"
+                                          BackgroundColor="{Binding Status, Converter={StaticResource SubscriptionStatusBackgroundConverter}}" 
+                                          HorizontalOptions="End"
+                                          Margin="0,4,0,0">
+                                        <Label Text="{Binding Status, Converter={StaticResource SubscriptionStatusConverter}}" 
+                                             TextColor="{Binding Status, Converter={StaticResource SubscriptionStatusColorConverter}}"
+                                             FontSize="11"
+                                             FontAttributes="Bold" />
+                                    </Border>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ScrollView>
+
+        <!-- Floating Action Button with opacity tied to scrolling state -->
         <Button Text="+"
                 Style="{StaticResource FloatingActionButtonStyle}"
                 Command="{Binding AddSubscriptionCommand}"
-                Grid.Row="1" />
+                Grid.Row="1"
+                Opacity="{Binding IsScrolling, Converter={StaticResource InverseBoolConverter}, ConverterParameter=1}">
+            <Button.Triggers>
+                <DataTrigger TargetType="Button"
+                             Binding="{Binding IsScrolling}"
+                             Value="True">
+                    <Setter Property="IsEnabled" Value="False" />
+                    <Setter Property="InputTransparent" Value="True" />
+                </DataTrigger>
+                <DataTrigger TargetType="Button"
+                             Binding="{Binding IsScrolling}"
+                             Value="False">
+                    <Setter Property="IsEnabled" Value="True" />
+                    <Setter Property="InputTransparent" Value="False" />
+                </DataTrigger>
+            </Button.Triggers>
+        </Button>
     </Grid>
 </ContentPage>
