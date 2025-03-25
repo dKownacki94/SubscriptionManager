@@ -77,7 +77,7 @@ public partial class SubscriptionListViewModel : ObservableObject
         _scrollResetCts?.Cancel();
         _scrollResetCts = new CancellationTokenSource();
 
-        Task.Delay(300, _scrollResetCts.Token).ContinueWith(t =>
+        Task.Delay(600, _scrollResetCts.Token).ContinueWith(t =>
         {
             if (!t.IsCanceled)
             {
